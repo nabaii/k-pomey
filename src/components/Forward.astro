@@ -1,0 +1,36 @@
+---
+/** The ruled "next page" row that closes most sections. */
+interface Props {
+  href: string;
+  label: string;
+  meta: string;
+}
+const { href, label, meta } = Astro.props;
+---
+
+<a class="fwd" href={href}>
+  <span class="fwd-label">{label}</span>
+  <span class="meta">{meta} <span class="arrow" aria-hidden="true">&rarr;</span></span>
+</a>
+
+<style>
+  .fwd {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 26px 0;
+    border-top: 1px solid var(--line);
+    text-decoration: none;
+  }
+  :global(.ink) .fwd { border-top-color: var(--line-inv); }
+  .fwd-label {
+    font-family: var(--font-display);
+    font-size: clamp(1.3125rem, 2.6vw, 1.875rem);
+    transition: color 0.3s;
+  }
+  .fwd:hover .fwd-label { color: var(--niwa); }
+  :global(.ink) .fwd:hover .fwd-label { color: var(--niwa-2); }
+  .arrow { display: inline-block; transition: transform 0.25s; }
+  .fwd:hover .arrow { transform: translateX(5px); }
+</style>

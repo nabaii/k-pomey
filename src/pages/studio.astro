@@ -1,0 +1,213 @@
+---
+import Base from '../layouts/Base.astro';
+import Sheet from '../components/Sheet.astro';
+import Slot from '../components/Slot.astro';
+import PanelGrid from '../components/PanelGrid.astro';
+import Panel from '../components/Panel.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { site, instagramUrl } from '../lib/site';
+
+/**
+ * §7.6 STUDIO — "legitimacy, process, and the highest-quality conversion."
+ *
+ * §7.6 — the process steps are numbered because the content is genuinely a
+ * sequence, and step 05 deliberately ends in the care offer rather than at
+ * handover.
+ */
+const facts = [
+  { value: '2016', label: 'Registered' },
+  { value: 'Area 1', label: 'Abuja base' },
+  { value: 'FCT', label: 'Service area' },
+];
+
+const process = [
+  { n: 'Step 01', h: 'Site visit', t: 'We walk the ground with you, measure, check sun and drainage, and listen to how you use the space.' },
+  { n: 'Step 02', h: 'Design', t: 'A layout and 3D render of the finished garden, with plants and materials named.' },
+  { n: 'Step 03', h: 'Quote', t: 'Itemised pricing and a build programme. You approve the number before anyone mobilises.' },
+  { n: 'Step 04', h: 'Build', t: 'Our own crew on site, with weekly photo updates so you can follow the work from anywhere.' },
+  { n: 'Step 05', h: 'Keep', t: 'A walkthrough, a care sheet for your planting, and your first monthly visit booked before we leave.' },
+];
+---
+
+<Base
+  title="The studio — K. Pomey Landscaping and Alatu"
+  description="Area 1, Abuja. Since 2016. Japanese tranquility, Nigerian vibrancy, one garden — how we work, and how to reach us."
+  omitFooterLink="Studio"
+  bar={{
+    href: '#contact',
+    label: 'Book a visit',
+    message: 'Hello K. Pomey, I would like to book a site visit.',
+  }}
+>
+  <section class="section-tight">
+    <div class="wrap">
+      <p class="eyebrow">The studio</p>
+      <h1 class="page-title">Area 1, Abuja.<br />Since 2016.</h1>
+    </div>
+  </section>
+
+  <div class="wrap"><hr class="rule" /></div>
+
+  {/* ---- 01 · ABOUT --------------------------------------------------- */}
+  <section class="section-tight">
+    <div class="wrap">
+      <Sheet n="01" label="The practice" />
+      <div class="about">
+        <div class="about-img">
+          <Slot label="Photo — the crew on site" tone="pale" ratio="4/3" sizes="(min-width: 861px) 40vw, 100vw" />
+        </div>
+
+        <div class="rise">
+          <blockquote class="pull">
+            Japanese tranquility. Nigerian vibrancy. One garden.
+          </blockquote>
+
+          <p class="body-p">
+            The name carries the whole business in two languages: <b>landscaping</b>,
+            the building of it, and <b>alatu</b> — Hausa for beautification — the
+            keeping of it.
+          </p>
+          <p class="body-p">
+            We take the restraint of a Japanese garden, space left empty on purpose
+            and one stone placed well, and give it the colour and warmth people here
+            actually want to sit in. We work for homeowners, estates, schools and
+            corporate grounds, as main contractor or alongside your builder — small
+            enough that the person who drew your garden is on site while it is built.
+          </p>
+
+          <dl class="facts">
+            {
+              facts.map((f) => (
+                <div>
+                  <dt>{f.value}</dt>
+                  <dd class="meta">{f.label}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ---- 02 · PROCESS -------------------------------------------------- */}
+  <section class="section-tight">
+    <div class="wrap">
+      <Sheet n="02" label="Design first" />
+      <h2 class="heading">You see it before we build it.</h2>
+      <PanelGrid cols={5} class="rise">
+        {
+          process.map((s, i) => (
+            /* §4.1 — Studio's single --heat accent is the step that ends in
+               the care offer rather than at handover (§7.6). */
+            <Panel label={s.n} heading={s.h} heat={i === process.length - 1}>
+              {s.t}
+            </Panel>
+          ))
+        }
+      </PanelGrid>
+    </div>
+  </section>
+
+  {/* ---- 03 · CONTACT --------------------------------------------------- */}
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <Sheet n="03" label="Book a site visit" />
+      <div class="contact-grid">
+        <div>
+          <h2 class="heading">Tell us about<br />your space.</h2>
+          <p class="lede contact-lede">
+            Fill this in and it opens WhatsApp with your details already written
+            out. Send it, and we come back with a visit date.
+          </p>
+          <ContactForm />
+        </div>
+
+        <dl class="details">
+          <div>
+            <dt>WhatsApp</dt>
+            <dd><a href={`tel:+${site.whatsapp}`}>{site.whatsappDisplay}</a></dd>
+          </div>
+          <div>
+            <dt>Instagram</dt>
+            <dd><a href={instagramUrl} target="_blank" rel="noopener">@{site.instagram}</a></dd>
+          </div>
+          <div>
+            <dt>Office</dt>
+            <dd>{site.officeLine1}<br />{site.officeLine2}</dd>
+          </div>
+          <div>
+            <dt>Hours</dt>
+            <dd>{site.hours}</dd>
+          </div>
+          <div>
+            <dt>Service area</dt>
+            <dd>{site.serviceArea}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .heading { margin-bottom: clamp(20px, 2.5vw, 32px); }
+
+  .about { display: grid; gap: clamp(30px, 4vw, 56px); }
+  .about-img { align-self: start; }
+  @media (min-width: 861px) {
+    .about { grid-template-columns: 1fr 1.15fr; align-items: center; }
+  }
+
+  .pull {
+    margin: 0 0 22px;
+    padding-left: 22px;
+    border-left: 2px solid var(--kanmuri);
+    font-family: var(--font-display);
+    font-size: clamp(1.1875rem, 2vw, 1.5rem);
+    line-height: 1.35;
+  }
+  .body-p + .body-p { margin-top: 16px; }
+  .body-p b { font-weight: 500; color: var(--niwa); }
+
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 26px 46px;
+    margin-top: clamp(28px, 3.5vw, 44px);
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+  .facts dt {
+    font-family: var(--font-display);
+    font-size: clamp(1.375rem, 2.2vw, 1.75rem);
+    line-height: 1.1;
+  }
+  .facts dd { margin: 4px 0 0; }
+
+  .contact {
+    padding-block: var(--section);
+    background: var(--washi-2);
+  }
+  .contact-grid { display: grid; gap: clamp(34px, 5vw, 70px); }
+  .contact-lede { margin-bottom: clamp(26px, 3vw, 38px); }
+  @media (min-width: 861px) {
+    .contact-grid { grid-template-columns: 1.1fr 1fr; }
+  }
+
+  .details div {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .details div:first-child { padding-top: 0; }
+  .details dt {
+    margin-bottom: 6px;
+    font-size: 0.625rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--koke-d);
+  }
+  .details dd { margin: 0; font-size: 0.9375rem; }
+  .details a { text-decoration: none; border-bottom: 1px solid var(--line); }
+  .details a:hover { color: var(--niwa); }
+</style>

@@ -1,0 +1,134 @@
+---
+/**
+ * §5.5 / §3.5 THE DIPTYCH — the site's signature.
+ *
+ * Two full-bleed panels hinged on a gold rule with drawn pivot points:
+ * Landscaping on ink (English — the building of it), Alatu on paper
+ * (Hausa — the keeping of it). The business model rendered as layout.
+ *
+ * §3.5 [LOCKED]: "It is the one place where boldness is spent. Do not add a
+ * second focal moment, and do not add a third pane — the bilingual pairing is
+ * the whole idea." §7.4 records why Flowers does not become a third pane.
+ *
+ * Stacks vertically below 861px, ink above paper, which §5.5 calls the
+ * stronger presentation rather than a fallback.
+ */
+const panes = [
+  {
+    word: 'Landscaping',
+    language: 'English — the building of it',
+    heading: 'We put it in the ground.',
+    note: 'Design first, always. A layout, a render and a named plant list before anyone digs.',
+    schedule: [
+      'Survey, layout & 3D render',
+      'Turfing, palms, hedging, beds',
+      'Paving, walls & pool surrounds',
+      'Gazebos, aviaries, water features',
+    ],
+    ink: true,
+  },
+  {
+    word: 'Alatu',
+    language: 'Hausa — the keeping of it',
+    heading: 'Then we keep it beautiful.',
+    note: "A garden isn't finished at handover. That's the day it starts. We return on a fixed monthly visit.",
+    schedule: [
+      'Mowing, pruning & edging',
+      'Flowering beds, borders & planters',
+      'Dry-season watering & replanting',
+      'Estate & corporate grounds',
+    ],
+    ink: false,
+  },
+];
+---
+
+<section class="diptych" aria-label="Landscaping and Alatu">
+  <div class:list={['pane', { ink: panes[0]!.ink }]}>
+    <h2 class="word">{panes[0]!.word}</h2>
+    <p class="language">{panes[0]!.language}</p>
+    <h3>{panes[0]!.heading}</h3>
+    <p class="note">{panes[0]!.note}</p>
+    <ol class="schedule">
+      {panes[0]!.schedule.map((item) => <li>{item}</li>)}
+    </ol>
+  </div>
+
+  <div class="hinge" aria-hidden="true"></div>
+
+  <div class="pane">
+    <h2 class="word">{panes[1]!.word}</h2>
+    <p class="language">{panes[1]!.language}</p>
+    <h3>{panes[1]!.heading}</h3>
+    <p class="note">{panes[1]!.note}</p>
+    <ol class="schedule">
+      {panes[1]!.schedule.map((item) => <li>{item}</li>)}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .diptych { display: grid; }
+  .pane { padding: var(--section) var(--gutter); }
+
+  .word {
+    margin-bottom: 8px;
+    font-size: var(--t-dip);
+    line-height: 0.9;
+    letter-spacing: -0.035em;
+  }
+  .language {
+    margin-bottom: 34px;
+    font-size: var(--t-meta);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--kanmuri-d);
+  }
+  .pane.ink .language { color: var(--kanmuri); }
+  h3 { margin-bottom: 14px; }
+
+  /* §5.5 — a numbered schedule with leading zeros, not a bullet list. */
+  .schedule {
+    counter-reset: item;
+    margin-top: 32px;
+  }
+  .schedule li {
+    counter-increment: item;
+    display: flex;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.875rem;
+  }
+  .schedule li::before {
+    content: '0' counter(item);
+    flex: none;
+    padding-top: 3px;
+    font-family: var(--font-display);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    color: var(--kanmuri-d);
+  }
+  .pane.ink .schedule li { border-bottom-color: var(--line-inv); }
+  .pane.ink .schedule li::before { color: var(--kanmuri); }
+
+  /* §8 — side by side with the hinge from 861px. */
+  @media (min-width: 861px) {
+    .diptych { grid-template-columns: 1fr 1px 1fr; }
+    .hinge { position: relative; background: var(--kanmuri); }
+    .hinge::before,
+    .hinge::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      width: 9px;
+      height: 9px;
+      margin-left: -4.5px;
+      border: 1px solid var(--kanmuri);
+      border-radius: 50%;
+      background: var(--washi);
+    }
+    .hinge::before { top: 16%; }
+    .hinge::after { bottom: 16%; }
+  }
+</style>

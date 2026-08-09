@@ -1,0 +1,205 @@
+---
+/**
+ * §5.4 THE INDEX LIST [signature component]
+ *
+ * Replaces the card grid on Home. §3.6 rejects a card grid there as
+ * "merchandising — a confident portfolio lists its work", and §5.4 [LOCKED]
+ * adds that the list scales: twenty projects stay scannable where twenty
+ * cards become a wall.
+ *
+ * Desktop — the row indents on hover and the project's image appears in a
+ * panel that follows the cursor with damped motion.
+ * Mobile — no peek; each row carries an inline 16:9 thumbnail beneath it.
+ */
+import Slot from './Slot.astro';
+import { linkFor, type Project } from '../lib/projects';
+
+interface Props {
+  projects: Project[];
+}
+const { projects } = Astro.props;
+
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<div class="index">
+  {
+    projects.map((project, i) => {
+      const href = linkFor(project);
+      const Tag = href ? 'a' : 'article';
+      const meta =
+        project.data.flag ?? `${project.data.category} · ${project.data.year}`;
+
+      return (
+        <Tag class="row rise" {...(href ? { href } : {})}>
+          <span class="row-line">
+            <span class="row-n">{pad(project.data.homeOrder ?? i + 1)}</span>
+            <span class="row-name">{project.data.title}</span>
+            <span class:list={['row-meta', 'meta', { heat: project.data.carriesHeat }]}>
+              {meta}
+            </span>
+          </span>
+
+          <span class="row-thumb">
+            <Slot
+              src={project.data.hero.src}
+              alt={project.data.hero.alt}
+              label={project.data.hero.label}
+              tone={project.data.hero.tone}
+              ratio="16/9"
+              sizes="(min-width: 861px) 300px, 100vw"
+            />
+          </span>
+        </Tag>
+      );
+    })
+  }
+</div>
+
+<!-- §5.4 — the peek. Decoration: it duplicates information already in the
+     row, so it is hidden from assistive technology. -->
+<div class="peek" id="index-peek" aria-hidden="true">
+  {
+    projects.map((project) => (
+      <span class="peek-item">
+        <Slot
+          src={project.data.hero.src}
+          alt=""
+          label={project.data.hero.label}
+          tone={project.data.hero.tone}
+          ratio="16/9"
+          sizes="300px"
+        />
+      </span>
+    ))
+  }
+</div>
+
+<script>
+  /**
+   * §4.5 — "Index peek: project image follows cursor, damped at 0.14."
+   * §4.5 also requires pointer-driven motion to be disabled on coarse
+   * pointers: it costs battery and does nothing without a cursor.
+   */
+  const peek = document.getElementById('index-peek');
+  const rows = document.querySelectorAll<HTMLElement>('.index .row');
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (peek && rows.length && fine && !reduced) {
+    const items = Array.from(peek.querySelectorAll<HTMLElement>('.peek-item'));
+    let targetX = 0;
+    let targetY = 0;
+    let x = 0;
+    let y = 0;
+    let raf = 0;
+    let running = false;
+
+    const tick = () => {
+      x += (targetX - x) * 0.14;
+      y += (targetY - y) * 0.14;
+      peek.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      raf = requestAnimationFrame(tick);
+    };
+
+    const stop = () => {
+      peek.classList.remove('is-on');
+      items.forEach((el) => el.classList.remove('is-on'));
+      if (running) {
+        cancelAnimationFrame(raf);
+        running = false;
+      }
+    };
+
+    rows.forEach((row, i) => {
+      row.addEventListener('mouseenter', () => {
+        items.forEach((el, j) => el.classList.toggle('is-on', i === j));
+        peek.classList.add('is-on');
+        if (!running) {
+          // Start where the cursor already is, so it does not fly in.
+          x = targetX;
+          y = targetY;
+          running = true;
+          raf = requestAnimationFrame(tick);
+        }
+      });
+      row.addEventListener('mouseleave', stop);
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+    });
+    document.addEventListener('mouseleave', stop);
+  }
+</script>
+
+<style>
+  .row {
+    display: block;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+    transition: padding-left 0.45s var(--ease-rise);
+  }
+  .row:first-child { border-top: 1px solid var(--line); }
+
+  .row-line {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .row-n {
+    flex: none;
+    font-family: var(--font-display);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    color: var(--kanmuri-d);
+  }
+  .row-name {
+    font-family: var(--font-display);
+    font-size: var(--t-index);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    transition: color 0.3s;
+  }
+  .row-meta { margin-left: auto; flex: none; display: none; }
+  .heat { color: var(--heat); }
+
+  .row-thumb { display: block; margin: 14px 0 2px; }
+
+  @media (hover: hover) and (pointer: fine) {
+    a.row:hover { padding-left: 18px; }
+    a.row:hover .row-name { color: var(--niwa); }
+  }
+
+  /* §8 — at 861px the peek replaces the inline thumbnails. */
+  @media (min-width: 861px) {
+    .row-meta { display: block; }
+    .row-thumb { display: none; }
+  }
+
+  .peek {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 15;
+    width: 300px;
+    height: 190px;
+    margin: -95px 0 0 -150px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .peek.is-on { opacity: 1; }
+  .peek-item {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+  .peek-item.is-on { opacity: 1; }
+
+  @media (max-width: 860px), (prefers-reduced-motion: reduce) {
+    .peek { display: none; }
+  }
+</style>

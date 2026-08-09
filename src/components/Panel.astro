@@ -1,0 +1,65 @@
+---
+/** One cell of a PanelGrid: a small tracked label, a heading, a note, and an
+ *  optional ruled feature list. */
+interface Props {
+  label?: string;
+  heading: string;
+  /** Marks this panel's label as the page's single --heat accent (§4.1). */
+  heat?: boolean;
+  features?: string[];
+  price?: string;
+}
+const { label, heading, heat = false, features = [], price } = Astro.props;
+---
+
+<div class="panel">
+  {label && <p class:list={['panel-label', { heat }]}>{label}</p>}
+  <h3>{heading}</h3>
+  {price && <p class="price">{price}</p>}
+  <p class="note"><slot /></p>
+  {
+    features.length > 0 && (
+      <ul class="features">
+        {features.map((f) => <li>{f}</li>)}
+      </ul>
+    )
+  }
+</div>
+
+<style>
+  .panel-label {
+    font-size: var(--t-meta);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--kanmuri-d);
+  }
+  :global(.ink) .panel-label,
+  :global(.on-ink) .panel-label { color: var(--kanmuri); }
+  .heat { color: var(--heat); }
+  :global(.ink) .heat,
+  :global(.on-ink) .heat { color: var(--heat-i); }
+
+  h3 { margin: 6px 0 10px; }
+  .price {
+    margin: -4px 0 10px;
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    color: var(--kanmuri-d);
+  }
+  :global(.ink) .price { color: var(--kanmuri); }
+  .note { margin: 0; }
+
+  .features { margin-top: 18px; }
+  .features li {
+    display: flex;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: var(--t-note);
+  }
+  .features li::before { content: '—'; flex: none; color: var(--kanmuri-d); }
+  :global(.ink) .features li,
+  :global(.on-ink) .features li { border-bottom-color: var(--line-inv); }
+  :global(.ink) .features li::before,
+  :global(.on-ink) .features li::before { color: var(--kanmuri); }
+</style>

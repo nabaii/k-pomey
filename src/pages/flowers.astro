@@ -1,0 +1,191 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Sheet from '../components/Sheet.astro';
+import Slot from '../components/Slot.astro';
+import PanelGrid from '../components/PanelGrid.astro';
+import Panel from '../components/Panel.astro';
+import Action from '../components/Action.astro';
+import Forward from '../components/Forward.astro';
+
+/**
+ * §7.4 FLOWERS — sell the supply-and-install line.
+ *
+ * §7.4 [LOCKED] on colour discipline: flower photography is the most
+ * saturated content on the site, so the chrome stays ink, paper and green and
+ * no petal colours enter :root. Flowers read brighter against restraint.
+ *
+ * The gallery is the concept's one sanctioned exception: a dense,
+ * photography-forward grid, because flower work is inherently image-rich.
+ */
+const gallery = (await getCollection('flowers')).sort((a, b) => a.data.order - b.data.order);
+
+const supply = [
+  { n: '01', h: 'Beds & borders', t: 'Flowering beds set out, soiled and planted — new, or a tired bed stripped and replanted.' },
+  { n: '02', h: 'Planters & pots', t: 'Potted flowering plants for entrances, terraces, balconies and receptions. Pots supplied or yours filled.' },
+  { n: '03', h: 'Massed colour', t: 'Edging, drifts and blocks of a single flower for driveways, frontages and event grounds.' },
+  { n: '04', h: 'Seasonal replanting', t: 'Beds turned over when the colour tires — before harmattan and again after the rains.' },
+];
+
+const steps = [
+  { n: 'Step 01', h: 'Visit & measure', t: 'We see the space, check sun and watering, and measure the beds or count the pots.' },
+  { n: 'Step 02', h: 'Selection', t: 'We name the flowers, quantities and pot sizes, with a price for plants and planting together.' },
+  { n: 'Step 03', h: 'Supply & install', t: 'Delivered and planted the same visit. Soil prepared, beds mulched, pots set where you want them.' },
+  { n: 'Step 04', h: 'Keep it flowering', t: 'A care note, and a rotation date if you want one — so the colour comes back before it goes.' },
+];
+---
+
+<Base
+  title="Flowers — supply and install — K. Pomey Landscaping and Alatu"
+  description="We supply flowering plants and put them in the ground the same visit: beds, borders, planters and massed colour for homes, offices, hotels and estates across Abuja."
+  omitFooterLink="Flowers"
+  bar={{
+    href: '/studio/#contact',
+    label: 'Get a quote',
+    message: 'Hello K. Pomey, I would like a quote for flowers — supply and install.',
+  }}
+>
+  <section class="section-tight">
+    <div class="wrap">
+      <p class="eyebrow">Flowers &middot; supply &amp; install</p>
+      <h1 class="page-title">Colour, delivered<br />and planted.</h1>
+      <p class="lede">
+        We supply flowering plants and put them in the ground the same visit —
+        beds, borders, planters and massed colour for homes, offices, hotels and
+        estates across Abuja.
+      </p>
+    </div>
+  </section>
+
+  <div class="wrap"><hr class="rule" /></div>
+
+  {/* ---- 01 · WHAT WE SUPPLY ---------------------------------------- */}
+  <section class="section-tight">
+    <div class="wrap">
+      <Sheet n="01" label="What we supply" />
+      <h2 class="heading">Grown, delivered, planted.</h2>
+      <PanelGrid cols={4} class="rise">
+        {supply.map((s) => <Panel label={s.n} heading={s.h}>{s.t}</Panel>)}
+      </PanelGrid>
+    </div>
+  </section>
+
+  {/* ---- 02 · RECENT FLOWER WORK ------------------------------------ */}
+  <section class="section-tight">
+    <div class="wrap">
+      <Sheet n="02" label="Recent flower work" />
+      <h2 class="heading">The portfolio.</h2>
+      <div class="gallery rise">
+        {
+          gallery.map((item) => (
+            <figure class={item.data.size}>
+              <Slot
+                src={item.data.src}
+                alt={item.data.alt}
+                label={item.data.label}
+                tone={item.data.tone}
+                sizes="(min-width: 1001px) 25vw, (min-width: 641px) 33vw, 50vw"
+              />
+              {/* §7.4 — captions on wide tiles only. */}
+              {item.data.size === 'wide' && item.data.caption && (
+                <figcaption>{item.data.caption}</figcaption>
+              )}
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ---- 03 · TWO WAYS TO BUY --------------------------------------- */}
+  <section class="buy ink section-tight">
+    <div class="buy-inner">
+      <Sheet n="03" label="Two ways to buy" />
+      <h2 class="buy-h">Once, or every season.</h2>
+      <p class="lede buy-lede">
+        Both start the same way — we come and look at the space. What differs is
+        what happens after the flowers are in.
+      </p>
+
+      {/* §7.4 — equal weight, because the revenue is split evenly. */}
+      <PanelGrid cols={2} onInk class="rise">
+        <Panel label="Option A" heading="One-off supply & install">
+          You need colour now — a frontage before an event, a reception refreshed,
+          a bed replanted. We quote the plants and the labour together, deliver and
+          plant in one visit, and leave you a short care note.
+        </Panel>
+        <Panel label="Option B" heading="Seasonal rotation">
+          Flowers are a wasting asset in Abuja heat. On a rotation agreement we
+          replant on a set schedule and keep the beds fed and watered between
+          changes, so the frontage never has a dead month.
+        </Panel>
+      </PanelGrid>
+
+      {/* §7.4 — the rotation panel links to Care rather than duplicating it. */}
+      <p class="buy-cta"><Action href="/care/">See rotation &amp; care plans</Action></p>
+    </div>
+  </section>
+
+  {/* ---- 04 · HOW IT WORKS ------------------------------------------ */}
+  <section class="section-tight">
+    <div class="wrap">
+      <Sheet n="04" label="How it works" />
+      <h2 class="heading">Four steps, one visit to start.</h2>
+      <PanelGrid cols={4} class="rise">
+        {
+          steps.map((s, i) => (
+            /* §4.1 — this page's single --heat accent is the step that turns a
+               one-off sale into a rotation. */
+            <Panel label={s.n} heading={s.h} heat={i === steps.length - 1}>
+              {s.t}
+            </Panel>
+          ))
+        }
+      </PanelGrid>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="wrap">
+      <Forward href="/studio/#contact" label="Ask for a flower quote" meta="Contact" />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .heading { margin-bottom: clamp(24px, 3vw, 40px); }
+
+  /* §8 — 2-up mobile, 3-up from 641px, 4-up from 1001px. */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(10px, 1.4vw, 18px);
+    align-items: start;
+  }
+  .gallery figure { position: relative; margin: 0; aspect-ratio: 1; }
+  .gallery figure.wide { grid-column: span 2; aspect-ratio: 3 / 2; }
+  figcaption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 14px;
+    background: linear-gradient(transparent, color-mix(in srgb, var(--sumi) 78%, transparent));
+    color: var(--washi);
+    font-size: var(--t-meta);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  @media (min-width: 641px) {
+    .gallery { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 1001px) {
+    .gallery { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  .buy { margin-inline: var(--gutter); }
+  .buy-inner { padding: clamp(30px, 4.5vw, 64px) clamp(24px, 4vw, 56px); }
+  .buy-h { margin-bottom: 16px; }
+  .buy-lede { margin-bottom: clamp(24px, 3vw, 38px); }
+  .buy-cta { margin-top: clamp(24px, 3vw, 38px); max-width: none; }
+</style>

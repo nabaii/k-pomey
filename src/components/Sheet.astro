@@ -1,0 +1,54 @@
+---
+/**
+ * §4.4 SHEET NUMBER — "the page's structural spine".
+ *
+ * Runs 01, 02, 03… down every page. §13 lists sheet numbering as outstanding
+ * on Work, Flowers, Care, Studio and the project pages; here it is a component,
+ * so a page cannot be built without one.
+ */
+interface Props {
+  n: string;
+  label: string;
+  /**
+   * The sheet label names its section. Where a section has no visible <h2>,
+   * render it as one so the heading order stays sequential (§9) — the
+   * appearance is identical either way.
+   */
+  as?: 'p' | 'h2';
+}
+const { n, label, as: Tag = 'p' } = Astro.props;
+---
+
+<Tag class="sheet"><b>{n}</b><i aria-hidden="true"></i>{label}</Tag>
+
+<style>
+  .sheet {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    max-width: none;
+    margin-bottom: 26px;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: var(--t-meta);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--koke-d);
+  }
+  b {
+    flex: none;
+    font-family: var(--font-display);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--kanmuri-d);
+  }
+  i {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  :global(.ink) .sheet { color: var(--koke); }
+  :global(.ink) b { color: var(--kanmuri); }
+  :global(.ink) i { background: var(--line-inv); }
+</style>

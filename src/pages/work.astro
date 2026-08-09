@@ -1,0 +1,163 @@
+---
+import Base from '../layouts/Base.astro';
+import Sheet from '../components/Sheet.astro';
+import TitleBlock from '../components/TitleBlock.astro';
+import BeforeAfter from '../components/BeforeAfter.astro';
+import WorkCard from '../components/WorkCard.astro';
+import Forward from '../components/Forward.astro';
+import { workGrid, featuredReveal, linkFor } from '../lib/projects';
+
+/**
+ * §7.2 WORK — "answer: can these people actually do it?"
+ *
+ * Structure: page head → before/after reveal → 12-column card grid → forward
+ * link to Care. Card order is fixed in content (§7.2) and validated in
+ * lib/projects.ts.
+ *
+ * §13 lists sheet numbering and a title block as outstanding on this page;
+ * both are here. §13 also proposes converting the grid to the index
+ * treatment — not done, because §7.2 specifies a card grid with a fixed order
+ * and the UI screens draw one. Raised with the client rather than decided.
+ */
+const cards = await workGrid();
+const reveal = await featuredReveal();
+const revealHref = reveal ? linkFor(reveal) : null;
+const fact = (label: string) =>
+  reveal?.data.facts.find((f) => f.label.toLowerCase() === label)?.value;
+---
+
+<Base
+  title="Work — K. Pomey Landscaping and Alatu"
+  description="Gardens, structures, paving and green walls built in Abuja. Every garden starts as bare laterite, blockwork and a promise."
+  omitFooterLink="Work"
+  bar={{
+    href: '/studio/#contact',
+    label: 'Book a visit',
+    message: 'Hello K. Pomey, I saw your work page and would like to talk about a garden.',
+  }}
+>
+  <section class="section-tight">
+    <div class="wrap">
+      <p class="eyebrow">Selected work</p>
+      <h1 class="page-title">From dirt<br />to drip.</h1>
+      <p class="lede">
+        Every garden starts as bare laterite, blockwork and a promise. Drag the
+        handle to see what changed.
+      </p>
+    </div>
+  </section>
+
+  <div class="wrap"><hr class="rule" /></div>
+
+  {/* ---- 01 · THE PROOF --------------------------------------------- */}
+  {
+    reveal && reveal.data.before && reveal.data.after && (
+      <section class="section-tight">
+        <div class="wrap">
+          <Sheet n="01" label="The proof" />
+          <div class="reveal rise">
+            <BeforeAfter before={reveal.data.before} after={reveal.data.after} />
+            <div class="reveal-text ink">
+              <p class="eyebrow">Featured garden</p>
+              <h2 class="reveal-title">
+                {revealHref ? (
+                  <a href={revealHref}>
+                    {reveal.data.title}, {reveal.data.location.split(',')[0]}
+                  </a>
+                ) : (
+                  <>
+                    {reveal.data.title}, {reveal.data.location.split(',')[0]}
+                  </>
+                )}
+              </h2>
+              <p class="note">{reveal.data.summary}</p>
+              <dl class="facts">
+                {
+                  ['scope', 'build', 'since'].map((k) =>
+                    fact(k) ? (
+                      <div>
+                        <dt>{k}</dt>
+                        <dd>{fact(k)}</dd>
+                      </div>
+                    ) : null,
+                  )
+                }
+              </dl>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {/* ---- 02 · THE PORTFOLIO ----------------------------------------- */}
+  <section class="section-tight">
+    <div class="wrap">
+      <Sheet n="02" label="The portfolio" />
+      <div class="grid">
+        {cards.map((project) => <WorkCard project={project} />)}
+      </div>
+    </div>
+  </section>
+
+  {/* ---- 03 · KEEPING THEM ------------------------------------------ */}
+  <section class="section-tight">
+    <div class="wrap">
+      <Sheet n="03" label="Keeping them" />
+      <Forward href="/care/" label="Keeping them" meta="Garden care" />
+      <div class="stamp">
+        <TitleBlock sheet="02" scale="N.T.S." rev="A" />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .reveal { display: grid; }
+  .reveal-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(24px, 3vw, 38px);
+  }
+  .reveal-title {
+    margin-bottom: 12px;
+    font-size: clamp(1.3125rem, 2.4vw, 1.75rem);
+    line-height: 1.2;
+  }
+  .reveal-title a { text-decoration: none; border-bottom: 1px solid var(--kanmuri); }
+  .reveal-title a:hover { color: var(--niwa-2); }
+
+  .facts { margin-top: 26px; }
+  .facts div {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--line-inv);
+    font-size: 0.78125rem;
+  }
+  .facts dt {
+    flex: none;
+    padding-top: 2px;
+    font-size: var(--t-meta);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--koke);
+  }
+  .facts dd { margin: 0; text-align: right; }
+
+  @media (min-width: 901px) {
+    .reveal { grid-template-columns: 2fr 1fr; }
+  }
+
+  /* §4.3 — 12-column card grid. */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(22px, 3vw, 40px);
+  }
+
+  .stamp { display: flex; justify-content: flex-end; margin-top: 26px; }
+  .stamp :global(.tblock) { width: 210px; }
+</style>

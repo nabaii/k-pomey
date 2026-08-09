@@ -1,0 +1,391 @@
+/* ==========================================================================
+   K. POMEY LANDSCAPING & ALATU
+   Shared stylesheet — build specification v2.1
+   §4 design system · §5 component library · §8 responsive
+   Authored mobile-first. No hard-coded colours outside :root. Radius 0.
+   ========================================================================== */
+
+*,*::before,*::after{box-sizing:border-box}
+
+/* --- §4.1 colour tokens --------------------------------------------------
+   -d suffixed tokens are the paper-surface siblings required by §9: the base
+   values fail WCAG AA as text on --washi (koke 2.77:1, gold 2.36:1,
+   heat 4.27:1). Adjusted at the token, never at the instance.            */
+:root{
+  --sumi:#161A17;   --sumi-2:#272E28;
+  --washi:#EDE9E0;  --washi-2:#E3DED2;
+  --niwa:#0E6B3E;   --niwa-2:#39A16D;
+  --kanmuri:#C0913C;--kanmuri-d:#7F5C1D;
+  --koke:#878F7D;   --koke-d:#58624F;
+  --heat:#AD3A0A;   --heat-i:#E2662C;
+  --draw:rgba(192,145,60,.55);
+  --line:rgba(22,26,23,.16);
+  --line-inv:rgba(237,233,224,.18);
+  /* image slots §4.6 */
+  --slot-1:#9FB09B; --slot-2:#DEDCCF;
+  --earth-1:#3B322A;--earth-2:#171310;
+  --wet-1:#0B6B41;  --wet-2:#4FB47D;
+  /* §4.3 geometry */
+  --gut:clamp(20px,5.5vw,80px);
+  --sec:clamp(52px,8vw,116px);
+  --sect:clamp(40px,6vw,80px);
+  --dsp:"Zen Old Mincho",Georgia,"Times New Roman",serif;
+  --bdy:"Zen Kaku Gothic New","Helvetica Neue",Arial,sans-serif;
+}
+
+/* --- §4.2 base type ----------------------------------------------------- */
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--washi);color:var(--sumi);
+  font:300 16.5px/1.7 var(--bdy);-webkit-font-smoothing:antialiased}
+h1,h2,h3,p,figure,blockquote{margin:0}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+ul,ol{margin:0;padding:0;list-style:none}
+button,input,select,textarea{font:inherit;color:inherit}
+
+.dsp{font-family:var(--dsp);font-weight:400}
+h1,h2,h3,.dsp{font-family:var(--dsp);font-weight:400}
+h2{font-size:clamp(28px,4.2vw,52px);line-height:1.14;letter-spacing:-.012em}
+h3{font-size:clamp(19px,1.9vw,26px);line-height:1.26;letter-spacing:-.012em}
+.lede{font-size:clamp(16px,1.5vw,19.5px);line-height:1.65;color:var(--sumi-2);max-width:54ch}
+p{max-width:54ch}
+.note{font-size:13.5px;line-height:1.6;color:var(--koke-d);max-width:46ch}
+
+/* eyebrow / meta / drafting annotation */
+.eb,.meta{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:400}
+.eb{color:var(--kanmuri-d);display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.eb::before{content:"";width:26px;height:1px;background:var(--kanmuri);flex:none}
+.meta{color:var(--koke-d);font-size:9.5px;letter-spacing:.2em}
+.ann{font-size:9px;letter-spacing:.18em;text-transform:uppercase;fill:var(--kanmuri);
+  font-family:var(--bdy);font-weight:400}
+.hot{color:var(--heat)}                       /* §4.1 — once per page. Never twice. */
+.ink .hot{color:var(--heat-i)}                /* ink-surface sibling, AA at 5.17:1 */
+
+/* --- layout ------------------------------------------------------------- */
+.wrap{max-width:1280px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+.sec{padding-top:var(--sec);padding-bottom:var(--sec)}
+.sec-t{padding-top:var(--sect);padding-bottom:var(--sect)}
+.ink{background:var(--sumi);color:var(--washi)}
+.ink p,.ink .lede{color:var(--washi)}
+.ink .note{color:var(--koke)}
+.ink .eb{color:var(--kanmuri)}
+.ink .meta{color:var(--koke)}
+.rule{height:1px;background:var(--line);border:0;margin:0}
+.ink .rule{background:var(--line-inv)}
+
+/* --- §9 focus + skip link ----------------------------------------------- */
+:focus-visible{outline:2px solid var(--niwa);outline-offset:3px}
+.ink :focus-visible{outline-color:var(--niwa-2)}
+.skip{position:absolute;left:-9999px;top:0;z-index:99;background:var(--sumi);
+  color:var(--washi);padding:12px 18px}
+.skip:focus{left:0}
+
+/* --- §4.4 the drawing layer --------------------------------------------- */
+.grid-bg{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--draw) 1px,transparent 1px),
+                   linear-gradient(90deg,var(--draw) 1px,transparent 1px);
+  background-size:46px 46px;opacity:.42;
+  -webkit-mask-image:radial-gradient(ellipse 62% 66% at 62% 48%,#000 20%,transparent 76%);
+          mask-image:radial-gradient(ellipse 62% 66% at 62% 48%,#000 20%,transparent 76%)}
+
+.reg{position:relative}
+.reg::before,.reg::after{content:"";position:absolute;width:9px;height:9px;
+  border-color:var(--kanmuri);border-style:solid;pointer-events:none}
+.reg::before{top:-1px;left:-1px;border-width:1px 0 0 1px}
+.reg::after{bottom:-1px;right:-1px;border-width:0 1px 1px 0}
+
+.sheet{display:flex;align-items:center;gap:14px;margin-bottom:26px;
+  font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--koke-d)}
+.sheet b{font-family:var(--dsp);font-size:11px;font-weight:500;letter-spacing:.12em;
+  color:var(--kanmuri-d)}
+.sheet i{flex:1;height:1px;background:var(--line);font-style:normal}
+.ink .sheet{color:var(--koke)}
+.ink .sheet b{color:var(--kanmuri)}
+.ink .sheet i{background:var(--line-inv)}
+
+.dim{display:flex;align-items:center;gap:10px;font-size:9px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--koke-d)}
+.dim::before,.dim::after{content:"";flex:1;height:1px;background:var(--draw)}
+
+.tblock{border:1px solid var(--draw);display:grid;grid-template-columns:1fr 1fr;
+  font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--koke-d);
+  background:color-mix(in srgb,var(--washi) 82%,transparent)}
+.tblock span{padding:7px 12px;border-right:1px solid var(--draw);white-space:nowrap}
+.tblock span:last-child{border-right:0}
+.tblock span:nth-child(3){grid-column:1/-1;border-top:1px solid var(--draw);border-right:0}
+.tblock b{color:var(--kanmuri-d);font-weight:500;font-family:var(--dsp);letter-spacing:.1em}
+
+/* --- §5.2 identity rail (>=1101px only) --------------------------------- */
+.rail{display:none}
+@media(min-width:1101px){
+  body.has-rail{padding-left:42px}
+  .rail{display:flex;position:fixed;inset:0 auto 0 0;width:42px;z-index:20;
+    align-items:center;justify-content:center;border-right:1px solid var(--line);
+    background:var(--washi)}
+  .rail span{writing-mode:vertical-rl;transform:rotate(180deg);font-size:9px;
+    letter-spacing:.26em;text-transform:uppercase;color:var(--koke-d);white-space:nowrap}
+  .rail.inv{background:var(--sumi);border-right-color:var(--line-inv)}
+  .rail.inv span{color:var(--koke)}
+}
+
+/* --- §5.1 navigation ---------------------------------------------------- */
+.nav{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--washi) 88%,transparent);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav.inv{background:color-mix(in srgb,var(--sumi) 88%,transparent);
+  border-bottom-color:var(--line-inv);color:var(--washi)}
+.nav-in{max-width:1280px;margin:0 auto;padding:0 var(--gut);height:64px;
+  display:flex;align-items:center;gap:24px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;margin-right:auto}
+.brand svg{width:30px;height:30px;flex:none}
+.brand b{display:block;font-family:var(--dsp);font-size:15px;font-weight:500;
+  letter-spacing:.06em;line-height:1.1}
+.brand i{display:block;font-style:normal;font-size:8px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--koke-d);line-height:1.6}
+.nav.inv .brand i{color:var(--koke)}
+.nav-lk{display:none;gap:26px}
+.nav-lk a{text-decoration:none;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  padding:6px 0;border-bottom:1px solid transparent}
+.nav-lk a:hover{color:var(--niwa)}
+.nav.inv .nav-lk a:hover{color:var(--niwa-2)}
+.nav-lk a[aria-current=page]{border-bottom-color:var(--niwa)}
+.nav.inv .nav-lk a[aria-current=page]{border-bottom-color:var(--niwa-2)}
+.nav-cta{display:none}
+
+.burger{width:44px;height:44px;background:none;border:1px solid var(--line);
+  display:grid;place-content:center;gap:4px;cursor:pointer;padding:0}
+.nav.inv .burger{border-color:var(--line-inv)}
+.burger span{display:block;width:16px;height:1px;background:currentColor}
+@media(min-width:981px){
+  .nav-lk{display:flex}
+  .nav-cta{display:inline-flex}
+  .burger{display:none}
+  .nav-in{height:72px}
+}
+
+/* drawer §5.1 */
+.drawer{position:fixed;inset:0;z-index:60;background:var(--sumi);color:var(--washi);
+  display:flex;flex-direction:column;padding:var(--gut)}
+.drawer[hidden]{display:none}
+.drawer-top{display:flex;justify-content:flex-end}
+.drawer-x{width:44px;height:44px;background:none;border:1px solid var(--line-inv);
+  color:inherit;cursor:pointer;font-size:20px;line-height:1}
+.drawer nav{margin:auto 0;display:grid;gap:6px}
+.drawer nav a{font-family:var(--dsp);font-size:clamp(30px,9vw,44px);text-decoration:none;
+  padding:8px 0;border-bottom:1px solid var(--line-inv)}
+.drawer nav a[aria-current=page]{color:var(--niwa-2)}
+.drawer-ft{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--koke)}
+
+/* --- §5.3 buttons ------------------------------------------------------- */
+.btn,.btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:44px;padding:13px 22px;font-size:10.5px;letter-spacing:.2em;
+  text-transform:uppercase;text-decoration:none;cursor:pointer;border:1px solid var(--sumi);
+  transition:background .25s,color .25s,border-color .25s}
+.btn{background:var(--sumi);color:var(--washi)}
+.btn:hover{background:var(--niwa);border-color:var(--niwa)}
+.btn-ghost{background:none;color:var(--sumi)}
+.btn-ghost:hover{background:var(--sumi);color:var(--washi)}
+.ink .btn{background:var(--washi);color:var(--sumi);border-color:var(--washi)}
+.ink .btn:hover{background:var(--niwa-2);border-color:var(--niwa-2);color:var(--sumi)}
+.ink .btn-ghost{color:var(--washi);border-color:var(--line-inv)}
+.ink .btn-ghost:hover{background:var(--washi);color:var(--sumi)}
+
+/* joined pair — one drawn control (§5.3, Home only) */
+.hero-act{display:inline-flex;flex-direction:column;border:1px solid var(--sumi)}
+.hero-act a{border:0}
+.hero-act a+a{border-top:1px solid var(--sumi)}
+@media(min-width:561px){
+  .hero-act{flex-direction:row}
+  .hero-act a+a{border-top:0;border-left:1px solid var(--sumi)}
+}
+
+/* rule-underlined text action */
+.act{display:inline-flex;align-items:center;gap:10px;text-decoration:none;
+  font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;padding-bottom:7px;
+  border-bottom:1px solid var(--kanmuri);transition:color .25s}
+.act:hover{color:var(--niwa)}
+.ink .act:hover{color:var(--niwa-2)}
+.act .ar{transition:transform .25s}
+.act:hover .ar{transform:translateX(5px)}
+
+/* forward link — the ruled "next page" row */
+.fwd{display:flex;align-items:baseline;justify-content:space-between;gap:20px;
+  padding:26px 0;border-top:1px solid var(--line);text-decoration:none}
+.ink .fwd{border-top-color:var(--line-inv)}
+.fwd span:first-child{font-family:var(--dsp);font-size:clamp(21px,2.6vw,30px)}
+.fwd:hover span:first-child{color:var(--niwa)}
+.ink .fwd:hover span:first-child{color:var(--niwa-2)}
+
+/* --- §4.6 image slots --------------------------------------------------- */
+.ph{position:relative;display:grid;place-content:center;width:100%;height:100%;
+  min-height:150px;overflow:hidden;
+  background:linear-gradient(148deg,var(--slot-1),var(--slot-2))}
+.ph.dark{background:linear-gradient(148deg,var(--earth-1),var(--earth-2))}
+.ph.wet{background:linear-gradient(148deg,var(--wet-1),var(--wet-2))}
+.ph::after{content:attr(data-label);border:1px dashed color-mix(in srgb,var(--washi) 62%,transparent);
+  color:color-mix(in srgb,var(--washi) 78%,transparent);padding:7px 13px;
+  font-size:9px;letter-spacing:.18em;text-transform:uppercase;text-align:center;max-width:88%}
+.ph:not(.dark):not(.wet)::after{border-color:color-mix(in srgb,var(--sumi) 30%,transparent);
+  color:color-mix(in srgb,var(--sumi) 52%,transparent)}
+.ratio{position:relative;aspect-ratio:16/9}
+.ratio>*{position:absolute;inset:0}
+
+/* --- §5.4 the index list ------------------------------------------------ */
+.idx-row{display:block;text-decoration:none;border-bottom:1px solid var(--line);
+  padding:20px 0;transition:padding-left .45s cubic-bezier(.2,.7,.2,1)}
+.idx-row:first-child{border-top:1px solid var(--line)}
+.idx-line{display:flex;align-items:baseline;gap:16px}
+.idx-n{font-family:var(--dsp);font-size:11px;color:var(--kanmuri-d);letter-spacing:.1em;flex:none}
+.idx-nm{font-family:var(--dsp);font-size:clamp(21px,3.2vw,40px);line-height:1.05;
+  letter-spacing:-.02em;transition:color .3s}
+.idx-m{margin-left:auto;flex:none;display:none}
+.idx-th{margin:14px 0 2px}
+@media(hover:hover) and (pointer:fine){
+  .idx-row:hover{padding-left:18px}
+  .idx-row:hover .idx-nm{color:var(--niwa)}
+}
+@media(min-width:861px){
+  .idx-m{display:block}
+  .idx-th{display:none}
+}
+.peek{position:fixed;top:0;left:0;width:300px;height:190px;z-index:15;pointer-events:none;
+  opacity:0;transition:opacity .3s;margin:-95px 0 0 -150px}
+.peek.on{opacity:1}
+
+/* --- §5.5 the diptych --------------------------------------------------- */
+.dip{display:grid}
+.dip-p{padding:var(--sec) var(--gut)}
+.dip-w{font-family:var(--dsp);font-size:clamp(42px,7.6vw,92px);line-height:.9;
+  letter-spacing:-.035em;margin-bottom:8px}
+.dip-l{font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--kanmuri-d);margin-bottom:34px}
+.dip-p.ink .dip-l{color:var(--kanmuri)}
+.dip-p h3{margin-bottom:14px}
+.sched{counter-reset:s;margin-top:32px}
+.sched li{counter-increment:s;display:flex;gap:16px;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:14px}
+.dip-p.ink .sched li{border-bottom-color:var(--line-inv)}
+.sched li::before{content:"0" counter(s);font-family:var(--dsp);font-size:10px;
+  color:var(--kanmuri-d);letter-spacing:.1em;flex:none;padding-top:3px}
+.dip-p.ink .sched li::before{color:var(--kanmuri)}
+@media(min-width:861px){
+  .dip{grid-template-columns:1fr 1px 1fr}
+  .hinge{background:var(--kanmuri);position:relative}
+  .hinge::before,.hinge::after{content:"";position:absolute;left:50%;width:9px;height:9px;
+    margin-left:-4.5px;border:1px solid var(--kanmuri);border-radius:50%;background:var(--washi)}
+  .hinge::before{top:16%}
+  .hinge::after{bottom:16%}
+}
+
+/* --- §5.6 before / after ------------------------------------------------ */
+.ba{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--sumi)}
+.ba-l,.ba-a{position:absolute;inset:0}
+.ba-a{clip-path:inset(0 0 0 var(--x,50%))}
+.ba-r{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;
+  cursor:ew-resize;z-index:3;-webkit-appearance:none;appearance:none;background:none}
+.ba-h{position:absolute;top:50%;left:var(--x,50%);width:34px;height:34px;margin:-17px 0 0 -17px;
+  border-radius:50%;background:var(--washi);color:var(--sumi);display:grid;place-content:center;
+  font-size:13px;z-index:2;pointer-events:none}
+.ba-h::before{content:"";position:absolute;left:50%;top:-50vh;height:100vh;width:1px;
+  background:color-mix(in srgb,var(--washi) 70%,transparent);z-index:-1}
+.ba-c{position:absolute;bottom:14px;z-index:2;background:color-mix(in srgb,var(--sumi) 82%,transparent);
+  color:var(--washi);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  padding:7px 14px;border-radius:99px;pointer-events:none}
+.ba-b{left:14px}
+.ba-af{right:14px}
+@media(min-width:901px){.ba{aspect-ratio:16/10}}
+
+/* --- §5.7 work cards ---------------------------------------------------- */
+.grid{display:grid;gap:clamp(22px,3vw,40px);grid-template-columns:repeat(12,1fr)}
+.card{grid-column:span 12;display:block;text-decoration:none}
+.card-im{position:relative;aspect-ratio:16/10;overflow:hidden;margin-bottom:16px}
+.card-im>.ph,.card-im>img{position:absolute;inset:0;height:100%;object-fit:cover;
+  transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+a.card:hover .card-im>.ph,a.card:hover .card-im>img{transform:scale(1.04)}
+.card-hd{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  padding-top:12px;border-top:1px solid var(--line)}
+.card h3{font-size:clamp(18px,1.7vw,22px)}
+a.card:hover h3{color:var(--niwa)}
+.flag{position:absolute;top:14px;left:14px;z-index:2;background:var(--kanmuri);
+  color:var(--sumi);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;padding:7px 12px}
+@media(min-width:561px){
+  .card{grid-column:span 6}
+  .card.wide{grid-column:span 12}
+}
+@media(min-width:901px){
+  .card{grid-column:span 4}
+  .card.wide{grid-column:span 6}
+}
+
+/* --- panels (plans, steps, objections, tiles) --------------------------- */
+.panels{display:grid;border:1px solid var(--line)}
+.ink .panels,.panels.on-ink{border-color:var(--line-inv)}
+.panels>*{padding:26px;border-bottom:1px solid var(--line)}
+.ink .panels>*,.panels.on-ink>*{border-bottom-color:var(--line-inv)}
+.panels>*:last-child{border-bottom:0}
+.panels h3{margin:6px 0 10px}
+.panels .note{margin:0}
+.p-l{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--kanmuri-d)}
+.ink .p-l,.panels.on-ink .p-l{color:var(--kanmuri)}
+.ticks{margin-top:18px}
+.ticks li{display:flex;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.ink .ticks li,.panels.on-ink .ticks li{border-bottom-color:var(--line-inv)}
+.ticks li::before{content:"—";color:var(--kanmuri-d);flex:none}
+.ink .ticks li::before,.panels.on-ink .ticks li::before{color:var(--kanmuri)}
+
+/* --- §5.9 forms --------------------------------------------------------- */
+.field{display:block;margin-bottom:26px}
+.field>span{display:block;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--koke-d);margin-bottom:8px}
+.field input,.field select,.field textarea{width:100%;background:none;border:0;
+  border-bottom:1px solid var(--line);padding:11px 0;font-size:16px;font-weight:300;
+  border-radius:0;-webkit-appearance:none;appearance:none}
+.field select{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='6'%3E%3Cpath d='M0 0h9L4.5 6z' fill='%2358624F'/%3E%3C/svg%3E") right 4px center/9px 6px no-repeat}
+.field textarea{min-height:84px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{border-bottom-color:var(--niwa);
+  outline:2px solid var(--niwa);outline-offset:4px}
+.field ::placeholder{color:var(--koke-d);opacity:1}
+.err{color:var(--heat);font-size:12.5px;margin-top:8px;display:none}
+.field.bad .err{display:block}
+.field.bad input{border-bottom-color:var(--heat)}
+
+/* --- footer ------------------------------------------------------------- */
+.ft{background:var(--sumi);color:var(--washi);padding:38px 0}
+.ft-in{display:flex;flex-wrap:wrap;gap:18px 30px;justify-content:space-between;
+  font-size:12.5px;color:var(--koke)}
+.ft nav{display:flex;flex-wrap:wrap;gap:18px}
+.ft a{text-decoration:none}
+.ft a:hover{color:var(--niwa-2)}
+
+/* --- §5.10 mobile action bar -------------------------------------------- */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;
+  grid-template-columns:1fr 1fr;border-top:1px solid var(--sumi);
+  padding-bottom:env(safe-area-inset-bottom)}
+.bar a{display:flex;align-items:center;justify-content:center;min-height:54px;
+  text-decoration:none;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  background:var(--washi);color:var(--sumi)}
+.bar a+a{background:var(--niwa);color:var(--washi)}
+body{padding-bottom:calc(54px + env(safe-area-inset-bottom))}
+@media(min-width:821px){
+  .bar{display:none}
+  body{padding-bottom:0}
+}
+
+/* --- §4.5 motion -------------------------------------------------------- */
+.scribe [pathLength]{stroke-dasharray:1;stroke-dashoffset:1;
+  animation:scribe 2.4s cubic-bezier(.25,.8,.3,1) forwards;animation-delay:var(--d,0s)}
+@keyframes scribe{to{stroke-dashoffset:0}}
+.ln,.ln2{fill:none;stroke-width:1;vector-effect:non-scaling-stroke}
+.ln{stroke:var(--draw)}
+.ln2{stroke:color-mix(in srgb,var(--niwa) 55%,transparent)}
+.dsh{stroke-dasharray:4 4!important;stroke-dashoffset:0!important;animation:none!important}
+
+.rv{opacity:0;transform:translateY(16px);
+  transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0s!important;
+    transition-duration:.001ms!important}
+  .scribe [pathLength]{stroke-dashoffset:0}
+  .rv{opacity:1;transform:none}
+}

@@ -1,0 +1,146 @@
+---
+/**
+ * §5.6 BEFORE / AFTER REVEAL — the site's proof mechanism.
+ *
+ * Two stacked layers; the *after* layer clipped with inset(0 0 0 X%).
+ * Controlled by a visually hidden native <input type="range"> filling the
+ * frame, which delivers keyboard and screen-reader support for free.
+ *
+ * [LOCKED] "Do not replace with a custom pointer handler." Drag, tap-drag,
+ * arrow keys, Home/End and touch all work because the browser implements
+ * them — a bespoke handler would reimplement four of those and forget the
+ * fifth.
+ *
+ * §4.5 — direct manipulation, no easing.
+ */
+import Slot from './Slot.astro';
+import type { ImageMetadata } from 'astro';
+
+interface Frame {
+  src?: ImageMetadata | null;
+  alt?: string;
+  label: string;
+  tone?: 'pale' | 'earth' | 'wet';
+}
+
+interface Props {
+  before: Frame;
+  after: Frame;
+  /** Describes what the control does, for screen readers (§9). */
+  label?: string;
+  class?: string;
+}
+
+const {
+  before,
+  after,
+  label = 'Reveal the finished garden. Slide left to see the site before work, right to see it after.',
+  class: className,
+} = Astro.props;
+---
+
+<div class:list={['ba', className]}>
+  <span class="layer">
+    <Slot src={before.src} alt={before.alt} label={before.label} tone={before.tone ?? 'earth'} />
+  </span>
+  <span class="layer after">
+    <Slot src={after.src} alt={after.alt} label={after.label} tone={after.tone ?? 'wet'} />
+  </span>
+
+  <span class="capsule before-capsule">Before</span>
+  <span class="capsule after-capsule">After</span>
+  <span class="handle" aria-hidden="true">&#8596;</span>
+
+  <input class="range" type="range" min="0" max="100" value="50" step="1" aria-label={label} />
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.ba').forEach((ba) => {
+    const range = ba.querySelector<HTMLInputElement>('.range');
+    if (!range) return;
+    const sync = () => ba.style.setProperty('--x', `${range.value}%`);
+    range.addEventListener('input', sync);
+    sync();
+  });
+</script>
+
+<style>
+  .ba {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--sumi);
+  }
+  .layer { position: absolute; inset: 0; }
+  .after { clip-path: inset(0 0 0 var(--x, 50%)); }
+
+  /* The control is the whole frame. Invisible, but present and focusable. */
+  .range {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    appearance: none;
+  }
+  .range::-webkit-slider-thumb { appearance: none; width: 44px; height: 100%; }
+  .range::-moz-range-thumb { width: 44px; height: 100%; border: 0; }
+  /* §9 — focus is never removed, and here it must show on the frame. */
+  .range:focus-visible { outline-offset: -3px; }
+
+  /* Round, per the UI screens. §4.3's locked radius-0 list names buttons,
+     cards, images, flags, tags, the burger and the drawer close — not the
+     drag handle, which reads as a drawn pivot. */
+  .handle {
+    position: absolute;
+    top: 50%;
+    left: var(--x, 50%);
+    z-index: 2;
+    display: grid;
+    place-content: center;
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    border-radius: 50%;
+    background: var(--washi);
+    color: var(--sumi);
+    font-size: 0.8125rem;
+    pointer-events: none;
+  }
+  .handle::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -50vh;
+    z-index: -1;
+    width: 1px;
+    height: 100vh;
+    background: color-mix(in srgb, var(--washi) 70%, transparent);
+  }
+
+  .capsule {
+    position: absolute;
+    bottom: 14px;
+    z-index: 2;
+    padding: 7px 14px;
+    border-radius: 99px;
+    background: color-mix(in srgb, var(--sumi) 82%, transparent);
+    color: var(--washi);
+    font-size: var(--t-meta);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+  .before-capsule { left: 14px; }
+  .after-capsule { right: 14px; }
+
+  @media (min-width: 901px) {
+    .ba { aspect-ratio: 16 / 10; }
+  }
+</style>

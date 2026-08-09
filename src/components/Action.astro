@@ -1,0 +1,86 @@
+---
+/**
+ * §5.3 BUTTONS AND ACTIONS — three forms, all radius 0.
+ *  fill  — filled ink, inverts to green on hover
+ *  ghost — outline, fills ink on hover
+ *  rule  — rule-underlined text link, used on dark bands
+ * §3.6 rejects rounded "pill" buttons: a SaaS convention that contradicts a
+ * drafting system.
+ */
+interface Props {
+  href: string;
+  variant?: 'fill' | 'ghost' | 'rule';
+  arrow?: boolean;
+  external?: boolean;
+  class?: string;
+  'data-wa'?: string;
+}
+const {
+  href,
+  variant = 'fill',
+  arrow = false,
+  external = false,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={[variant, className]}
+  {...(external ? { target: '_blank', rel: 'noopener' } : {})}
+  {...rest}
+>
+  <slot />{arrow && <span class="arrow" aria-hidden="true">&rarr;</span>}
+</a>
+
+<style>
+  a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: var(--t-eyebrow);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* §9 — tap targets minimum 44×44px. */
+  .fill,
+  .ghost {
+    min-height: 44px;
+    padding: 13px 22px;
+    border: 1px solid var(--sumi);
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+  }
+  .fill { background: var(--sumi); color: var(--washi); }
+  .fill:hover { background: var(--niwa); border-color: var(--niwa); }
+  .ghost { background: none; color: var(--sumi); }
+  .ghost:hover { background: var(--sumi); color: var(--washi); }
+
+  :global(.ink) .fill {
+    background: var(--washi);
+    color: var(--sumi);
+    border-color: var(--washi);
+  }
+  :global(.ink) .fill:hover {
+    background: var(--niwa-2);
+    border-color: var(--niwa-2);
+    color: var(--sumi);
+  }
+  :global(.ink) .ghost { color: var(--washi); border-color: var(--line-inv); }
+  :global(.ink) .ghost:hover { background: var(--washi); color: var(--sumi); }
+
+  .rule {
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--kanmuri);
+    transition: color 0.25s;
+  }
+  .rule:hover { color: var(--niwa); }
+  :global(.ink) .rule:hover { color: var(--niwa-2); }
+
+  .arrow { transition: transform 0.25s; }
+  a:hover .arrow { transform: translateX(5px); }
+</style>

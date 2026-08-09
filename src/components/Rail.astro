@@ -1,0 +1,44 @@
+---
+/**
+ * §5.2 IDENTITY RAIL — fixed vertical rail, left edge, ≥1101px only.
+ * Decorative, so aria-hidden (§9). The body gains 42px left padding at the
+ * same breakpoint (see Base.astro) so it never overlaps content.
+ */
+interface Props {
+  inverted?: boolean;
+}
+const { inverted = false } = Astro.props;
+---
+
+<div class:list={['rail', { inv: inverted }]} aria-hidden="true">
+  <span>K. Pomey — Landscaping &amp; Alatu — Area 1, Abuja — Est. 2016</span>
+</div>
+
+<style>
+  .rail { display: none; }
+
+  @media (min-width: 1101px) {
+    .rail {
+      position: fixed;
+      inset: 0 auto 0 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--rail-w);
+      background: var(--washi);
+      border-right: 1px solid var(--line);
+    }
+    .rail.inv { background: var(--sumi); border-right-color: var(--line-inv); }
+    span {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      white-space: nowrap;
+      font-size: var(--t-ann);
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--koke-d);
+    }
+    .rail.inv span { color: var(--koke); }
+  }
+</style>

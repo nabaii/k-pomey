@@ -1,0 +1,13 @@
+name: Monthly
+kind: Visit
+description: One scheduled visit each month for compact gardens and courtyards.
+features:
+  - Mowing, edging & pruning
+  - Bed weeding & feeding
+  - Photo report after each visit
+# [OPEN §7.5 / decision 1] Recommendation: publish "from ₦X per visit" here and
+# on Fortnightly, and keep Grounds on enquiry. Published entry pricing filters
+# unqualified enquiries and raises perceived professionalism.
+# price: from ₦00,000 per visit
+price: ''
+order: 1

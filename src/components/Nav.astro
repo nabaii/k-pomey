@@ -1,0 +1,270 @@
+---
+/**
+ * §5.1 NAVIGATION — sticky header on every page. Below 981px the links and
+ * button collapse into a full-screen drawer with Mincho-set entries.
+ * §9 — the drawer is role="dialog" aria-modal, closes on Escape, toggles
+ * aria-expanded, locks body scroll and traps focus.
+ */
+import BrandMark from './BrandMark.astro';
+import Action from './Action.astro';
+
+interface Props {
+  inverted?: boolean;
+}
+const { inverted = false } = Astro.props;
+
+const links = [
+  { href: '/work/', label: 'Work' },
+  { href: '/flowers/', label: 'Flowers' },
+  { href: '/care/', label: 'Care' },
+  { href: '/studio/', label: 'Studio' },
+];
+
+const path = Astro.url.pathname.replace(/\/+$/, '') + '/';
+const isCurrent = (href: string) => path === href || (href !== '/' && path.startsWith(href));
+---
+
+<header class:list={['nav', { inv: inverted }]}>
+  <div class="nav-in">
+    <!-- No aria-label: the visible brand text is the accessible name. An
+         aria-label saying "and" over text reading "&" is a name mismatch,
+         and leaves voice-control users unable to say what they can see. -->
+    <a class="brand" href="/">
+      <BrandMark inverted={inverted} />
+      <span class="brand-tx">
+        <b>K. Pomey</b>
+        <i>Landscaping &amp; Alatu</i>
+      </span>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      {
+        links.map((l) => (
+          <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <Action href="/studio/#contact" class="nav-cta">Book a site visit</Action>
+
+    <button
+      class="burger"
+      id="nav-burger"
+      type="button"
+      aria-expanded="false"
+      aria-controls="nav-drawer"
+      aria-label="Open menu"
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div
+  class="drawer"
+  id="nav-drawer"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu"
+  hidden
+>
+  <div class="drawer-top">
+    <button class="drawer-close" type="button" aria-label="Close menu">&#215;</button>
+  </div>
+  <nav aria-label="Menu">
+    {
+      links.map((l) => (
+        <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+          {l.label}
+        </a>
+      ))
+    }
+    <a href="/studio/#contact">Book a site visit</a>
+  </nav>
+  <p class="drawer-foot">Area 1, Abuja &middot; Est. 2016</p>
+</div>
+
+<script>
+  const burger = document.getElementById('nav-burger');
+  const drawer = document.getElementById('nav-drawer');
+
+  if (burger && drawer) {
+    const focusables = () =>
+      Array.from(
+        drawer.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'),
+      ).filter((el) => el.offsetParent !== null);
+
+    let lastFocused: HTMLElement | null = null;
+
+    const open = () => {
+      lastFocused = document.activeElement as HTMLElement;
+      drawer.hidden = false;
+      burger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      focusables()[0]?.focus();
+    };
+
+    const close = () => {
+      drawer.hidden = true;
+      burger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      lastFocused?.focus();
+    };
+
+    burger.addEventListener('click', open);
+    drawer.querySelector('.drawer-close')?.addEventListener('click', close);
+    drawer.querySelectorAll('nav a').forEach((a) => a.addEventListener('click', close));
+
+    document.addEventListener('keydown', (e) => {
+      if (drawer.hidden) return;
+      if (e.key === 'Escape') {
+        close();
+        return;
+      }
+      // Focus trap — the dialog is modal, so Tab must not leave it.
+      if (e.key === 'Tab') {
+        const items = focusables();
+        if (!items.length) return;
+        const first = items[0]!;
+        const last = items[items.length - 1]!;
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+  }
+</script>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: color-mix(in srgb, var(--washi) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav.inv {
+    background: color-mix(in srgb, var(--sumi) 88%, transparent);
+    border-bottom-color: var(--line-inv);
+    color: var(--washi);
+  }
+  .nav-in {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: 64px;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-right: auto;
+    text-decoration: none;
+  }
+  .brand b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    line-height: 1.1;
+  }
+  .brand i {
+    display: block;
+    font-style: normal;
+    font-size: 0.5rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    line-height: 1.6;
+    color: var(--koke-d);
+  }
+  .inv .brand i { color: var(--koke); }
+
+  .nav-links { display: none; gap: 26px; }
+  .nav-links a {
+    padding: 6px 0;
+    border-bottom: 1px solid transparent;
+    font-size: var(--t-eyebrow);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .nav-links a:hover { color: var(--niwa); }
+  .inv .nav-links a:hover { color: var(--niwa-2); }
+  .nav-links a[aria-current='page'] { border-bottom-color: var(--niwa); }
+  .inv .nav-links a[aria-current='page'] { border-bottom-color: var(--niwa-2); }
+
+  .nav :global(.nav-cta) { display: none; }
+
+  .burger {
+    display: grid;
+    place-content: center;
+    gap: 4px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: none;
+    border: 1px solid var(--line);
+    cursor: pointer;
+  }
+  .inv .burger { border-color: var(--line-inv); }
+  .burger span { display: block; width: 16px; height: 1px; background: currentColor; }
+
+  /* §8 — header links and button appear at 981px; burger hidden. */
+  @media (min-width: 981px) {
+    .nav-in { height: 72px; }
+    .nav-links { display: flex; }
+    .nav :global(.nav-cta) { display: inline-flex; }
+    .burger { display: none; }
+  }
+
+  .drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    padding: var(--gutter);
+    background: var(--sumi);
+    color: var(--washi);
+  }
+  .drawer[hidden] { display: none; }
+  .drawer-top { display: flex; justify-content: flex-end; }
+  .drawer-close {
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: 1px solid var(--line-inv);
+    color: inherit;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .drawer nav { display: grid; gap: 6px; margin-block: auto; }
+  .drawer nav a {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line-inv);
+    font-family: var(--font-display);
+    font-size: clamp(1.875rem, 9vw, 2.75rem);
+    text-decoration: none;
+  }
+  .drawer nav a[aria-current='page'] { color: var(--niwa-2); }
+  .drawer-foot {
+    font-size: var(--t-meta);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--koke);
+  }
+  .drawer :focus-visible { outline-color: var(--niwa-2); }
+</style>

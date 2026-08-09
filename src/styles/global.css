@@ -1,0 +1,242 @@
+/* ==========================================================================
+   K. POMEY — global layer
+   Reset, typography, layout primitives and the drawing layer (§4.4).
+   Component-specific rules live scoped inside their own .astro file.
+   ========================================================================== */
+
+@import './tokens.css';
+
+/* --- reset ---------------------------------------------------------------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--washi);
+  color: var(--sumi);
+  font-family: var(--font-body);
+  font-weight: 300;               /* §4.2 — deliberate. Do not "fix" to 400. */
+  font-size: var(--t-body);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, p, figure, blockquote, dl, dd { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+img, svg { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:where(button) { border-radius: var(--radius); }
+
+/* --- display type §4.2 ----------------------------------------------------- */
+h1, h2, h3, .display {
+  font-family: var(--font-display);
+  font-weight: 400;
+}
+h2 { font-size: var(--t-h2); line-height: 1.14; letter-spacing: -0.012em; }
+h3 { font-size: var(--t-h3); line-height: 1.26; letter-spacing: -0.012em; }
+
+.page-title {
+  margin-bottom: 22px;
+  font-size: var(--t-page);
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+/* --- measure §4.2 ---------------------------------------------------------- */
+p { max-width: 54ch; }
+.lede {
+  font-size: var(--t-lede);
+  line-height: 1.65;
+  color: var(--sumi-2);
+  max-width: 54ch;
+}
+.note {
+  font-size: var(--t-note);
+  line-height: 1.6;
+  color: var(--koke-d);
+  max-width: 46ch;
+}
+
+/* --- eyebrow / meta / annotation ------------------------------------------- */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  font-size: var(--t-eyebrow);
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--kanmuri-d);
+}
+.eyebrow::before {
+  content: '';
+  flex: none;
+  width: 26px;
+  height: 1px;
+  background: var(--kanmuri);
+}
+.meta {
+  font-size: var(--t-meta);
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--koke-d);
+}
+
+/* §4.1 — the single saturated accent. One element per page carries it. */
+.heat { color: var(--heat); }
+
+/* --- surfaces -------------------------------------------------------------- */
+.ink { background: var(--sumi); color: var(--washi); }
+.ink :is(p, .lede) { color: var(--washi); }
+.ink .note { color: var(--koke); }
+.ink .eyebrow { color: var(--kanmuri); }
+.ink .meta { color: var(--koke); }
+.ink .heat { color: var(--heat-i); }
+
+/* --- layout ---------------------------------------------------------------- */
+.wrap {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.section { padding-block: var(--section); }
+.section-tight { padding-block: var(--section-tight); }
+.rule { height: 1px; margin: 0; border: 0; background: var(--line); }
+.ink .rule { background: var(--line-inv); }
+
+/* --- §9 focus, never removed ------------------------------------------------ */
+:focus-visible { outline: 2px solid var(--niwa); outline-offset: 3px; }
+.ink :focus-visible { outline-color: var(--niwa-2); }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 99;
+  padding: 12px 18px;
+  background: var(--sumi);
+  color: var(--washi);
+  text-decoration: none;
+}
+.skip-link:focus { left: 0; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   §4.4 THE DRAWING LAYER
+   The drafting furniture that makes the concept legible. All CSS and SVG,
+   negligible weight. Every element here is decoration and is aria-hidden.
+   ========================================================================== */
+
+/* survey grid — 46px, radially masked so it fades to nothing at the edges */
+.survey-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.62;
+  background-image:
+    linear-gradient(var(--draw) 1px, transparent 1px),
+    linear-gradient(90deg, var(--draw) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(ellipse 66% 70% at 62% 48%, #000 26%, transparent 80%);
+}
+
+/* registration marks — 9px corner brackets */
+.reg { position: relative; }
+.reg::before,
+.reg::after {
+  content: '';
+  position: absolute;
+  width: 9px; height: 9px;
+  border-style: solid;
+  border-color: var(--kanmuri);
+  pointer-events: none;
+}
+.reg::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+.reg::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+
+/* dimension pair — a label flanked by hairlines */
+.dim {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--t-ann);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--koke-d);
+}
+.dim::before,
+.dim::after { content: ''; flex: 1; height: 1px; background: var(--draw); }
+
+/* ==========================================================================
+   §4.5 MOTION
+   The scribe is the site's signature. Entrance fades are secondary and are
+   never applied to blocks sitting beside the scribe, which would compete.
+   ========================================================================== */
+
+/* Scribe: each stroke normalises to pathLength="1", so one dash rule serves
+   every shape, and sequencing is carried by --delay alone. */
+.scribe [pathLength] {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: scribe var(--dur-scribe) var(--ease-scribe) forwards;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes scribe { to { stroke-dashoffset: 0; } }
+
+.draw-line,
+.draw-line-green {
+  fill: none;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;   /* §4.3 — weight stays true at every viewport */
+}
+.draw-line { stroke: var(--draw); }
+.draw-line-green { stroke: color-mix(in srgb, var(--niwa) 55%, transparent); }
+.draw-dashed { stroke-dasharray: 4 4 !important; stroke-dashoffset: 0 !important; animation: none !important; }
+.draw-text {
+  font-family: var(--font-body);
+  font-size: var(--t-ann);
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  fill: var(--kanmuri);
+}
+
+/* Section entrance — fade + 16px rise, staggered 65ms in groups of four. */
+.rise {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity var(--dur-rise) var(--ease-rise),
+    transform var(--dur-rise) var(--ease-rise);
+}
+.rise.is-in { opacity: 1; transform: none; }
+
+/* §4.5 / §9 — reduced motion renders every animated element in its final
+   state: plan fully drawn, content fully visible, peek disabled. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .scribe [pathLength] { stroke-dashoffset: 0; }
+  .rise { opacity: 1; transform: none; }
+}

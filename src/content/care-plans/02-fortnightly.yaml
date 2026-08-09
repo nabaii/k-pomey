@@ -1,0 +1,11 @@
+name: Fortnightly
+kind: Visit
+description: Twice-monthly care for larger grounds, or through the growing season.
+features:
+  - Everything in Monthly
+  - Irrigation checks & dry-season watering
+  - Seasonal replanting
+# [OPEN §7.5 / decision 1] See 01-monthly.yaml.
+# price: from ₦00,000 per visit
+price: ''
+order: 2

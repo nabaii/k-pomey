@@ -1,0 +1,19 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# generated
+.vercel/
+.netlify/
+
+# environment
+.env
+.env.production
+
+# os / editor
+.DS_Store
+Thumbs.db
+*.log

@@ -1,0 +1,88 @@
+---
+/**
+ * The bordered panel run used for care plans, objection panels, the flower
+ * supply tiles and the process steps. One hairline box, divided — not a set
+ * of floating cards, which would import the shadowed-card convention §3.1
+ * warns against ("nothing gets a drop shadow").
+ */
+interface Props {
+  /** Columns at the widest breakpoint. */
+  cols: 2 | 3 | 4 | 5;
+  /** Breakpoint at which the columns engage. */
+  from?: 641 | 761 | 901 | 1001;
+  onInk?: boolean;
+  class?: string;
+}
+const { cols, from = 761, onInk = false, class: className } = Astro.props;
+---
+
+<div
+  class:list={['panels', `cols-${cols}`, `from-${from}`, { 'on-ink': onInk }, className]}
+>
+  <slot />
+</div>
+
+<style>
+  .panels {
+    display: grid;
+    border: 1px solid var(--line);
+  }
+  .on-ink,
+  :global(.ink) .panels { border-color: var(--line-inv); }
+
+  .panels > :global(*) {
+    padding: 26px;
+    border-bottom: 1px solid var(--line);
+  }
+  .on-ink > :global(*),
+  :global(.ink) .panels > :global(*) { border-bottom-color: var(--line-inv); }
+  .panels > :global(*:last-child) { border-bottom: 0; }
+
+  /* Two-up first, then the full count, so the middle sizes are not skipped. */
+  @media (min-width: 641px) {
+    .cols-4, .cols-5 { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (min-width: 761px) {
+    .from-761.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .from-761.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 901px) {
+    .from-901.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .from-901.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 1001px) {
+    .cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .cols-5 { grid-template-columns: repeat(5, 1fr); }
+  }
+
+  /* Once side by side, the dividers become vertical. */
+  @media (min-width: 641px) {
+    .cols-4 > :global(*), .cols-5 > :global(*) {
+      border-right: 1px solid var(--line);
+    }
+    .on-ink.cols-4 > :global(*), .on-ink.cols-5 > :global(*),
+    :global(.ink) .cols-4 > :global(*), :global(.ink) .cols-5 > :global(*) {
+      border-right-color: var(--line-inv);
+    }
+  }
+  @media (min-width: 761px) {
+    .from-761 > :global(*) { border-right: 1px solid var(--line); border-bottom: 0; }
+    .from-761.on-ink > :global(*),
+    :global(.ink) .from-761 > :global(*) { border-right-color: var(--line-inv); }
+    .from-761 > :global(*:last-child) { border-right: 0; }
+    /* Objection panels wrap to two rows; the first row keeps its rule. */
+    .from-761.cols-2 > :global(*:nth-child(even)) { border-right: 0; }
+    .from-761.cols-2 > :global(*:not(:nth-last-child(-n + 2))) {
+      border-bottom: 1px solid var(--line);
+    }
+    .from-761.cols-2.on-ink > :global(*:not(:nth-last-child(-n + 2))),
+    :global(.ink) .from-761.cols-2 > :global(*:not(:nth-last-child(-n + 2))) {
+      border-bottom-color: var(--line-inv);
+    }
+  }
+  @media (min-width: 1001px) {
+    .cols-4 > :global(*), .cols-5 > :global(*) { border-bottom: 0; }
+    .cols-4 > :global(*:last-child), .cols-5 > :global(*:last-child) { border-right: 0; }
+  }
+</style>

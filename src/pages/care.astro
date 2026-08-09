@@ -1,0 +1,123 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Sheet from '../components/Sheet.astro';
+import PanelGrid from '../components/PanelGrid.astro';
+import Panel from '../components/Panel.astro';
+import Action from '../components/Action.astro';
+import Forward from '../components/Forward.astro';
+
+/**
+ * §7.5 CARE — "convert completed builds into recurring revenue, and stand
+ * alone as a cold-sendable offer."
+ *
+ * Inverted to ink for the whole page. This marks Care as a distinct product
+ * rather than a subsection, and gives it its own identity when the URL
+ * arrives without context.
+ */
+const plans = (await getCollection('carePlans')).sort((a, b) => a.data.order - b.data.order);
+
+/* §7.5 — "The objection panels are load-bearing and should not be cut for
+   length." Each answers a real reason people refuse maintenance contracts. */
+const objections = [
+  {
+    h: 'Harmattan is the test',
+    t: 'Between December and March, an unwatered garden goes backwards faster than it grew. Care plans front-load watering and shade in exactly those months.',
+  },
+  {
+    h: 'One crew, not a new one',
+    t: 'The people who keep your garden are the people who built it. Nothing gets pruned wrong because nobody knew what it was.',
+  },
+  {
+    h: 'You get pictures',
+    t: 'A short photo report after every visit, so you can see the work whether or not you were home.',
+  },
+  {
+    h: "Cancel on a month's notice",
+    t: 'No long lock-in. The plan holds because the garden looks right, not because of a contract.',
+  },
+];
+---
+
+<Base
+  title="Garden care — Alatu — K. Pomey Landscaping and Alatu"
+  description="Monthly, fortnightly and annual grounds care in Abuja. Most gardens are lost in the dry season, not the wet one. A fixed visit costs a fraction of replanting."
+  inverted
+  omitFooterLink="Care"
+  bar={{
+    href: '/studio/#contact',
+    label: 'Get a quote',
+    message: 'Hello K. Pomey, I would like a quote for garden care (Alatu).',
+  }}
+>
+  <section class="section-tight">
+    <div class="wrap">
+      <p class="eyebrow">Alatu &middot; Hausa for beautification</p>
+      <h1 class="page-title">The garden you paid for,<br />twelve months a year.</h1>
+      <p class="lede">
+        Most gardens in Abuja are lost in the dry season, not the wet one. A fixed
+        monthly visit costs a fraction of replanting — and your garden is never
+        between gardeners.
+      </p>
+    </div>
+  </section>
+
+  <div class="wrap"><hr class="rule" /></div>
+
+  {/* ---- 01 · THE PLANS ---------------------------------------------- */}
+  <section class="section-tight">
+    <div class="wrap">
+      <Sheet n="01" label="The plans" as="h2" />
+      <PanelGrid cols={3} class="rise">
+        {
+          plans.map((plan) => (
+            <Panel
+              label={plan.data.kind}
+              heading={plan.data.name}
+              price={plan.data.price}
+              features={plan.data.features}
+            >
+              {plan.data.description}
+            </Panel>
+          ))
+        }
+      </PanelGrid>
+    </div>
+  </section>
+
+  {/* ---- 02 · WHY PEOPLE SAY NO -------------------------------------- */}
+  <section class="section-tight">
+    <div class="wrap">
+      <Sheet n="02" label="Why people say no" as="h2" />
+      <PanelGrid cols={2} class="rise">
+        {
+          objections.map((o, i) => (
+            /* §4.1 — Care's single --heat accent. Every element on this page
+               sits on ink, so it resolves to --heat-i (5.17:1). */
+            <div>
+              <h3 class:list={{ heat: i === 0 }}>{o.h}</h3>
+              <p class="note">{o.t}</p>
+            </div>
+          ))
+        }
+      </PanelGrid>
+      <p class="cta"><Action href="/studio/#contact">Ask for a care quote</Action></p>
+    </div>
+  </section>
+
+  {/* ---- 03 · THE STUDIO --------------------------------------------- */}
+  <section class="section-tight">
+    <div class="wrap">
+      <Sheet n="03" label="The studio" />
+      <Forward href="/studio/" label="The studio" meta="About & process" />
+    </div>
+  </section>
+</Base>
+
+<style>
+  h3 { margin-bottom: 10px; }
+  .cta { margin-top: clamp(28px, 4vw, 44px); max-width: none; }
+  /* The footer sits on the same ink as the page, so it needs a rule to read
+     as a separate band. */
+  :global(.ft) { border-top: 1px solid var(--line-inv); }
+</style>

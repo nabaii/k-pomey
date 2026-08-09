@@ -1,0 +1,98 @@
+---
+/**
+ * §5.7 WORK CARDS — image, title, category, note. Standard and wide variants.
+ * Hover scales the image to 1.04. Used on Work and Flowers, not on Home.
+ *
+ * A card whose project has no destination renders as <article>, never <a>
+ * (§3.3). That is decided by the content, not by this component.
+ */
+import Slot from './Slot.astro';
+import { linkFor, type Project } from '../lib/projects';
+
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+const d = project.data;
+const href = linkFor(project);
+const Tag = href ? 'a' : 'article';
+---
+
+<Tag
+  id={project.id}
+  class:list={['card', 'rise', d.cardWidth]}
+  {...(href ? { href } : {})}
+>
+  <div class="card-image">
+    {d.flag && <span class="flag">{d.flag}</span>}
+    <Slot
+      src={d.hero.src}
+      alt={d.hero.alt}
+      label={d.hero.label}
+      tone={d.hero.tone}
+      ratio="16/10"
+      sizes="(min-width: 901px) 33vw, (min-width: 561px) 50vw, 100vw"
+    />
+  </div>
+
+  <div class="card-head">
+    <h3>{d.title}</h3>
+    <span class:list={['meta', { heat: d.carriesHeat }]}>{d.category}</span>
+  </div>
+
+  <p class="note">{d.summary}</p>
+</Tag>
+
+<style>
+  .card {
+    display: block;
+    grid-column: span 12;
+    text-decoration: none;
+  }
+
+  .card-image {
+    position: relative;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .card-image :global(.slot) {
+    transition: transform 0.5s var(--ease-rise);
+  }
+  a.card:hover .card-image :global(.slot) { transform: scale(1.04); }
+
+  .flag {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 2;
+    padding: 7px 12px;
+    background: var(--kanmuri);
+    color: var(--sumi);
+    font-size: var(--t-meta);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+  }
+  h3 { font-size: clamp(1.125rem, 1.7vw, 1.375rem); transition: color 0.3s; }
+  a.card:hover h3 { color: var(--niwa); }
+  .heat { color: var(--heat); }
+  .note { margin-top: 10px; }
+
+  /* §4.3 — standard 4/6/12, wide 6/12/12 (desktop / tablet / mobile). */
+  @media (min-width: 561px) {
+    .card { grid-column: span 6; }
+    .card.wide { grid-column: span 12; }
+  }
+  @media (min-width: 901px) {
+    .card { grid-column: span 4; }
+    .card.wide { grid-column: span 6; }
+  }
+</style>

@@ -1,0 +1,112 @@
+---
+/**
+ * §4.6 IMAGE SLOT — the governing constraint of the whole build (§3.2).
+ *
+ * "Structure carries the site; photography improves it." Every image position
+ * on this site renders through this component. Give it a photograph and it
+ * emits a responsive, lazily-loaded, AVIF/WebP <picture>. Give it nothing and
+ * it emits a labelled drafting placeholder that reads as intentional.
+ *
+ * That is why the build is never blocked on the photo library (§11.1): the
+ * slots are already the right size and shape, and installing a photograph is
+ * a content change, not a layout change.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src?: ImageMetadata | null;
+  alt?: string;
+  /** Shown while src is absent. Must describe the intended shot. */
+  label: string;
+  tone?: 'pale' | 'earth' | 'wet';
+  /** CSS aspect-ratio, e.g. "16/9". Omit to fill the parent. */
+  ratio?: string;
+  sizes?: string;
+  /** Above-the-fold images load eagerly and are not lazy. */
+  priority?: boolean;
+  class?: string;
+}
+
+const {
+  src,
+  alt = '',
+  label,
+  tone = 'pale',
+  ratio,
+  sizes = '(min-width: 1280px) 1280px, 100vw',
+  priority = false,
+  class: className,
+} = Astro.props;
+
+// §9 — "Every <img> carries meaningful alt." Non-negotiable, so a photograph
+// without one fails the build rather than shipping.
+if (src && !alt.trim()) {
+  throw new Error(
+    `Slot: an image was supplied without alt text (label: "${label}"). ` +
+      `§9 requires meaningful alt on every image. Add one in the content file.`,
+  );
+}
+---
+
+<div
+  class:list={['slot', `tone-${tone}`, className]}
+  style={ratio ? `aspect-ratio:${ratio}` : undefined}
+>
+  {
+    src ? (
+      <Image
+        src={src}
+        alt={alt}
+        sizes={sizes}
+        widths={[480, 800, 1200, 1600, 2000]}
+        loading={priority ? 'eager' : 'lazy'}
+        decoding={priority ? 'sync' : 'async'}
+        format="webp"
+      />
+    ) : (
+      <span class="slot-label" aria-hidden="true">{label}</span>
+    )
+  }
+</div>
+
+<style>
+  .slot {
+    position: relative;
+    display: grid;
+    place-content: center;
+    width: 100%;
+    height: 100%;
+    min-height: 150px;
+    overflow: hidden;
+    background: linear-gradient(148deg, var(--slot-1), var(--slot-2));
+  }
+  .tone-earth { background: linear-gradient(148deg, var(--earth-1), var(--earth-2)); }
+  .tone-wet { background: linear-gradient(148deg, var(--wet-1), var(--wet-2)); }
+
+  .slot :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* A squared dashed capsule containing the label. Squared, because the
+     drafting system has no rounded corners (§4.3). */
+  .slot-label {
+    max-width: 88%;
+    padding: 7px 13px;
+    border: 1px dashed color-mix(in srgb, var(--sumi) 30%, transparent);
+    color: color-mix(in srgb, var(--sumi) 52%, transparent);
+    font-size: var(--t-ann);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .tone-earth .slot-label,
+  .tone-wet .slot-label {
+    border-color: color-mix(in srgb, var(--washi) 62%, transparent);
+    color: color-mix(in srgb, var(--washi) 78%, transparent);
+  }
+</style>

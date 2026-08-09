@@ -1,0 +1,53 @@
+---
+/**
+ * §5.8 / §3.1 THE PLAN DRAWING — the concept, drawn.
+ *
+ * "The site does not present itself as a photo gallery with text around it.
+ * It presents itself as the thing the firm actually produces first: a
+ * drawing." The entire hero is SVG and CSS — a few kilobytes, which is the
+ * point on Nigerian mobile data (§3.1).
+ *
+ * §4.5 — lines scribe in sequentially via stroke-dashoffset, staggered
+ * 0.05–1.76s over 2.4s. Every stroke declares pathLength="1" so a single dash
+ * rule serves rects, circles and paths alike, and sequencing is carried by
+ * --delay alone.
+ *
+ * Decoration throughout: aria-hidden, per §9.
+ */
+---
+
+<div class="plan" aria-hidden="true">
+  <svg class="scribe" viewBox="0 0 620 400" fill="none" role="presentation">
+    <!-- plot boundary -->
+    <rect class="draw-line" pathLength="1" style="--delay:.05s" x="14" y="18" width="592" height="322" />
+    <!-- proposed bed, dashed: already broken, so it does not scribe -->
+    <rect class="draw-line draw-dashed" x="52" y="52" width="212" height="104" />
+    <!-- terrace / pool -->
+    <rect class="draw-line" pathLength="1" style="--delay:.35s" x="346" y="46" width="226" height="238" />
+    <!-- planting sweep, in green: water and planting use .draw-line-green -->
+    <path
+      class="draw-line-green"
+      pathLength="1"
+      style="--delay:.62s"
+      d="M34 286C104 196 208 176 272 232s118 88 200 40 88-98 120-118"
+    />
+    <path class="draw-line draw-dashed" d="M52 156v130M264 52v104" />
+    <!-- setting-out circles: the planting rhythm -->
+    <circle class="draw-line-green" pathLength="1" style="--delay:.95s" cx="86" cy="308" r="17" />
+    <circle class="draw-line-green" pathLength="1" style="--delay:1.06s" cx="150" cy="308" r="17" />
+    <circle class="draw-line-green" pathLength="1" style="--delay:1.17s" cx="214" cy="308" r="17" />
+    <circle class="draw-line-green" pathLength="1" style="--delay:1.28s" cx="278" cy="308" r="17" />
+    <circle class="draw-line-green" pathLength="1" style="--delay:1.39s" cx="342" cy="308" r="17" />
+    <!-- dimension line with end ticks -->
+    <path class="draw-line" pathLength="1" style="--delay:1.6s" d="M14 372h592M14 366v12M606 366v12" />
+    <!-- north arrow -->
+    <path class="draw-line" pathLength="1" style="--delay:1.76s" d="M578 62V22l-9 13m9-13 9 13" />
+    <text class="draw-text" x="578" y="80" text-anchor="middle">N</text>
+    <text class="draw-text" x="310" y="366" text-anchor="middle">18 900</text>
+  </svg>
+</div>
+
+<style>
+  .plan { pointer-events: none; }
+  svg { width: 100%; height: auto; }
+</style>

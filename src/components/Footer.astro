@@ -1,0 +1,49 @@
+---
+import { instagramUrl } from '../lib/site';
+
+interface Props {
+  /** Which page we are on, so it is omitted from the secondary nav. */
+  omit?: string;
+}
+const { omit } = Astro.props;
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/work/', label: 'Work' },
+  { href: '/flowers/', label: 'Flowers' },
+  { href: '/care/', label: 'Care' },
+  { href: '/studio/', label: 'Studio' },
+].filter((l) => l.label !== omit);
+
+const year = new Date().getFullYear();
+---
+
+<footer class="ft">
+  <div class="wrap ft-in">
+    <p>&copy; {year} K. Pomey Landscaping and Alatu &middot; Area 1, Abuja</p>
+    <nav aria-label="Secondary">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+      <a href={instagramUrl} target="_blank" rel="noopener">Instagram</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .ft {
+    padding-block: 38px;
+    background: var(--sumi);
+    color: var(--washi);
+  }
+  .ft-in {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 18px 30px;
+    font-size: 0.78125rem;
+    color: var(--koke);
+  }
+  p { max-width: none; }
+  nav { display: flex; flex-wrap: wrap; gap: 18px; }
+  a { text-decoration: none; }
+  a:hover { color: var(--niwa-2); }
+</style>

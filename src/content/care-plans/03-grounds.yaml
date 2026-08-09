@@ -1,0 +1,10 @@
+name: Grounds
+kind: Contract
+description: Estates, schools, hotels and corporate grounds on an annual agreement.
+features:
+  - Assigned crew & supervisor
+  - Hardscape, lighting & water features
+  - Fixed schedule, annual renewal
+# Grounds stays on enquiry — the ticket varies too widely to publish (§7.5).
+price: ''
+order: 3

@@ -1,0 +1,176 @@
+---
+/**
+ * §5.9 FORMS / §7.6 CONTACT
+ *
+ * Underline-only fields, no boxes. Labels above in 10px tracked caps;
+ * placeholders are never the only label (§9). On submit the form composes a
+ * pre-filled wa.me deep link and opens it.
+ *
+ * §7.6: "No backend, no hosting cost, no spam, no failure mode, and the
+ * enquiry arrives structured rather than as 'hi how much for garden'."
+ *
+ * §11.3 — the button says what happens: "Send on WhatsApp", not "Submit".
+ */
+import { site, mailto } from '../lib/site';
+
+const needs = [
+  'A new garden',
+  'Garden care (Alatu)',
+  'Flowers — supply & install',
+  'Paving, structures or specialist build',
+  'Something else',
+];
+---
+
+<form id="enquiry" novalidate data-phone={site.whatsapp} data-domain={site.domain}>
+  <label class="field">
+    <span>Your name</span>
+    <input type="text" name="name" placeholder="e.g. Amina Bello" required autocomplete="name" />
+    <em class="error">Please tell us your name so we know who we are replying to.</em>
+  </label>
+
+  <label class="field">
+    <span>Where is the site?</span>
+    <input type="text" name="place" placeholder="e.g. Gwarinpa, Abuja" required />
+    <em class="error">Please tell us the area, so we can plan the visit.</em>
+  </label>
+
+  <label class="field">
+    <span>What do you need?</span>
+    <select name="need">
+      {needs.map((n) => <option value={n}>{n}</option>)}
+    </select>
+  </label>
+
+  <label class="field">
+    <span>Anything else we should know</span>
+    <textarea name="more" rows="3" placeholder="Size of the space, timing, budget range — whatever helps."
+    ></textarea>
+  </label>
+
+  <button type="submit" class="submit">Send on WhatsApp</button>
+
+  <p class="hint">
+    Prefer email? Write to <a href={mailto}>{site.email}</a>.
+  </p>
+</form>
+
+<script>
+  const form = document.getElementById('enquiry') as HTMLFormElement | null;
+
+  if (form) {
+    const phone = form.dataset.phone ?? '';
+    const domain = form.dataset.domain ?? '';
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      // §11.3 — errors state what went wrong and how to fix it, without
+      // apologising. Required fields are validated client-side (§7.6).
+      let firstInvalid: HTMLInputElement | null = null;
+      form.querySelectorAll<HTMLElement>('.field').forEach((field) => {
+        const input = field.querySelector<HTMLInputElement>('input[required]');
+        if (!input) return;
+        const empty = !input.value.trim();
+        field.classList.toggle('is-invalid', empty);
+        input.setAttribute('aria-invalid', String(empty));
+        if (empty && !firstInvalid) firstInvalid = input;
+      });
+      if (firstInvalid) {
+        (firstInvalid as HTMLInputElement).focus();
+        return;
+      }
+
+      const value = (name: string) =>
+        (form.elements.namedItem(name) as HTMLInputElement | null)?.value.trim() ?? '';
+
+      const lines = [
+        'Hello K. Pomey,',
+        '',
+        `Name: ${value('name')}`,
+        `Site location: ${value('place')}`,
+        `Need: ${value('need')}`,
+      ];
+      if (value('more')) lines.push(`Details: ${value('more')}`);
+      lines.push('', `Sent from ${domain}`);
+
+      window.open(
+        `https://wa.me/${phone}?text=${encodeURIComponent(lines.join('\n'))}`,
+        '_blank',
+        'noopener',
+      );
+    });
+
+    // Clear the error the moment the person starts fixing it.
+    form.querySelectorAll<HTMLInputElement>('input[required]').forEach((input) => {
+      input.addEventListener('input', () => {
+        input.closest('.field')?.classList.remove('is-invalid');
+        input.setAttribute('aria-invalid', 'false');
+      });
+    });
+  }
+</script>
+
+<style>
+  .field { display: block; margin-bottom: 26px; }
+  .field > span {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.625rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--koke-d);
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 11px 0;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    /* 16px minimum, or iOS Safari zooms the viewport on focus. */
+    font-size: 1rem;
+    font-weight: 300;
+    appearance: none;
+  }
+  select {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='6'%3E%3Cpath d='M0 0h9L4.5 6z' fill='%2358624F'/%3E%3C/svg%3E")
+      right 4px center / 9px 6px no-repeat;
+  }
+  textarea { min-height: 84px; resize: vertical; }
+  ::placeholder { color: var(--koke-d); opacity: 1; }
+
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible { border-bottom-color: var(--niwa); outline-offset: 4px; }
+
+  .error {
+    display: none;
+    margin-top: 8px;
+    font-size: 0.78125rem;
+    font-style: normal;
+    color: var(--heat);
+  }
+  .is-invalid .error { display: block; }
+  .is-invalid input { border-bottom-color: var(--heat); }
+
+  .submit {
+    min-height: 44px;
+    padding: 13px 22px;
+    background: var(--sumi);
+    color: var(--washi);
+    border: 1px solid var(--sumi);
+    font-size: var(--t-eyebrow);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .submit:hover { background: var(--niwa); border-color: var(--niwa); }
+
+  .hint { margin-top: 14px; font-size: 0.78125rem; color: var(--koke-d); }
+  .hint a { color: inherit; }
+</style>

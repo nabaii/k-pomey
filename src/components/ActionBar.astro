@@ -1,0 +1,55 @@
+---
+/**
+ * §5.10 MOBILE ACTION BAR — fixed bottom bar below 821px: a page-appropriate
+ * secondary action plus WhatsApp us. §6.2 route 1, the fastest path to a
+ * human and the one that is always visible.
+ *
+ * The body carries bottom padding equal to the bar height plus
+ * env(safe-area-inset-bottom); see Base.astro.
+ */
+import { waLink } from '../lib/site';
+
+interface Props {
+  secondaryHref: string;
+  secondaryLabel: string;
+  /** The pre-written WhatsApp message for this page. */
+  message: string;
+}
+const { secondaryHref, secondaryLabel, message } = Astro.props;
+---
+
+<nav class="bar" aria-label="Quick actions">
+  <a href={secondaryHref}>{secondaryLabel}</a>
+  <a href={waLink(message)} target="_blank" rel="noopener">WhatsApp us</a>
+</nav>
+
+<style>
+  .bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--sumi);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--bar-h);
+    background: var(--washi);
+    color: var(--sumi);
+    font-size: var(--t-eyebrow);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  a + a { background: var(--niwa); color: var(--washi); }
+
+  @media (min-width: 821px) {
+    .bar { display: none; }
+  }
+</style>

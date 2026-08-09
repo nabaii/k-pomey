@@ -1,0 +1,91 @@
+/* ==========================================================================
+   K. POMEY — design tokens
+   Build specification v2.1 §4.1 colour · §4.2 type · §4.3 geometry
+   The single source of colour in this project. No hard-coded hex value may
+   appear in any component stylesheet.
+   ========================================================================== */
+
+:root {
+  /* --- ink & paper ------------------------------------------------------ */
+  --sumi: #161a17;          /* ink        — dark surfaces, primary text      */
+  --sumi-2: #272e28;        /* ink soft   — secondary body text              */
+  --washi: #ede9e0;         /* paper      — default page background          */
+  --washi-2: #e3ded2;       /* paper deep — alternate surfaces, slot base    */
+
+  /* --- garden ----------------------------------------------------------- */
+  --niwa: #0e6b3e;          /* garden green — hover, focus, "landscaping"    */
+  --niwa-2: #39a16d;        /* garden light — accents on dark surfaces       */
+
+  /* --- drafting --------------------------------------------------------- */
+  --kanmuri: #c0913c;       /* crown gold — hinge, sheet numbers, flags      */
+  --koke: #878f7d;          /* moss       — labels, captions, muted UI       */
+  --heat: #ad3a0a;          /* heat       — ONE use per page. Never two.     */
+
+  /* --- surface-scoped siblings -----------------------------------------
+     §9 requires WCAG AA (4.5:1) for all body and label text and instructs
+     us to "adjust the token, not the instance". Measured against --washi,
+     the base values fail as text:
+
+       --koke     #878F7D  →  2.77:1   ✗
+       --kanmuri  #C0913C  →  2.36:1   ✗
+       --heat     #C2410C  →  4.27:1   ✗   (spec value; corrected above)
+
+     Measured against --sumi they pass, but the corrected paper values then
+     fail on ink. One token cannot serve both surfaces, so each has a
+     surface-scoped sibling. Suffix -d = on paper, -i = on ink.
+     Every value below is verified in docs/CONTRAST.md.                   */
+  --koke-d: #58624f;        /* 5.29:1 on washi · 4.78:1 on washi-2          */
+  --kanmuri-d: #7f5c1d;     /* 5.02:1 on washi · 4.53:1 on washi-2          */
+  --heat-i: #e2662c;        /* 5.17:1 on sumi                              */
+
+  /* --- lines ------------------------------------------------------------ */
+  --draw: rgb(192 145 60 / 0.55);   /* all hairline drafting linework       */
+  --line: rgb(22 26 23 / 0.16);     /* hairlines on light surfaces          */
+  --line-inv: rgb(237 233 224 / 0.18); /* hairlines on dark surfaces        */
+
+  /* --- image slots §4.6 -------------------------------------------------- */
+  --slot-1: #9fb09b;
+  --slot-2: #dedccf;
+  --earth-1: #3b322a;
+  --earth-2: #171310;
+  --wet-1: #0b6b41;
+  --wet-2: #4fb47d;
+
+  /* --- type §4.2 ---------------------------------------------------------
+     --font-display and --font-body are defined by Astro's font pipeline (see
+     astro.config.mjs), which self-hosts the families, subsets them to latin
+     and appends metric-matched fallbacks. Do not redeclare them here — the
+     fallback stacks live in the config and must not be removed.          */
+
+  --t-hero: clamp(2.875rem, 8.4vw, 8rem);      /* 46 → 128  lh .88  -.038em */
+  --t-dip: clamp(2.625rem, 7.6vw, 5.75rem);    /* 42 → 92   lh .90  -.035em */
+  --t-page: clamp(2.125rem, 5.6vw, 4.5rem);    /* 34 → 72   lh 1.0  -.025em */
+  --t-index: clamp(1.3125rem, 3.2vw, 2.5rem);  /* 21 → 40   lh 1.05 -.02em  */
+  --t-h2: clamp(1.75rem, 4.2vw, 3.25rem);      /* 28 → 52   lh 1.14 -.012em */
+  --t-h3: clamp(1.1875rem, 1.9vw, 1.625rem);   /* 19 → 26   lh 1.26 -.012em */
+  --t-lede: clamp(1rem, 1.5vw, 1.21875rem);    /* 16 → 19.5 lh 1.65         */
+  --t-body: 1.03125rem;                        /* 16.5      lh 1.70         */
+  --t-note: 0.84375rem;                        /* 13.5      lh 1.60         */
+  --t-eyebrow: 0.65625rem;                     /* 10.5      0.22em caps     */
+  --t-meta: 0.59375rem;                        /* 9.5       0.20em caps     */
+  --t-ann: 0.5625rem;                          /* 9         0.18em caps     */
+
+  /* --- geometry §4.3 ------------------------------------------------------ */
+  --container: 1280px;
+  --gutter: clamp(20px, 5.5vw, 80px);
+  --section: clamp(52px, 8vw, 116px);
+  --section-tight: clamp(40px, 6vw, 80px);
+  --rail-w: 42px;
+  --bar-h: 54px;
+
+  /* Radius 0. Everywhere. [LOCKED §4.3] The two exceptions are the
+     before/after drag handle and its Before/After capsules, which the
+     UI screens draw round and which §4.3's locked list does not name. */
+  --radius: 0;
+
+  /* --- motion §4.5 -------------------------------------------------------- */
+  --ease-scribe: cubic-bezier(0.25, 0.8, 0.3, 1);
+  --ease-rise: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-scribe: 2.4s;
+  --dur-rise: 0.7s;
+}

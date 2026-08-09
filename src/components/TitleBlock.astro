@@ -1,0 +1,49 @@
+---
+/**
+ * §4.4 TITLE BLOCK — the drawing stamp, bottom-right of a sheet.
+ * Decoration: aria-hidden, per §9.
+ */
+interface Props {
+  sheet: string;
+  scale?: string;
+  rev?: string;
+  class?: string;
+}
+const { sheet, scale = '1:100', rev = 'A', class: className } = Astro.props;
+---
+
+<div class:list={['tblock', className]} aria-hidden="true">
+  <span>Sheet <b>{sheet}</b></span>
+  <span>Scale <b>{scale}</b></span>
+  <span>Rev <b>{rev}</b></span>
+</div>
+
+<style>
+  .tblock {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid var(--draw);
+    background: color-mix(in srgb, var(--washi) 82%, transparent);
+    font-size: var(--t-ann);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--koke-d);
+  }
+  span {
+    padding: 7px 12px;
+    border-right: 1px solid var(--draw);
+    white-space: nowrap;
+  }
+  span:last-child {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--draw);
+    border-right: 0;
+  }
+  span:nth-child(2) { border-right: 0; }
+  b {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--kanmuri-d);
+  }
+</style>
