@@ -26,7 +26,7 @@ A developer can build from Section 4 onward. The copywriter, photographer and cl
 
 ### 1.1 The client
 
-K. Pomey Landscaping and Alatu is a landscaping and beautification contractor registered in Nigeria since 2016, operating from Area 1, Abuja. The firm has four revenue lines:
+K. Pomey Landscaping and Alatu is a landscaping and beautification contractor registered in Nigeria, operating from Area 1, Abuja. The firm has four revenue lines:
 
 | Line | Character | Ticket | Cycle |
 |---|---|---|---|
@@ -286,7 +286,7 @@ Placeholders must read as **intentional**, never as broken images.
 Sticky header on every page: brand mark (home), four links (Work / Flowers / Care / Studio), one primary button. Below 981px the links and button collapse into a **full-screen drawer** with Mincho-set entries. Current page carries `aria-current="page"` and a green underline.
 
 ### 5.2 Identity rail
-Fixed vertical rail, left edge, ≥1101px only: *K. Pomey — Landscaping & Alatu — Area 1, Abuja — Est. 2016*. Decorative; `aria-hidden`. Inverted variant `.rail.inv` for dark pages.
+Fixed vertical rail, left edge, ≥1101px only: *K. Pomey — Landscaping & Alatu — Area 1, Abuja*. Decorative; `aria-hidden`. Inverted variant `.rail.inv` for dark pages.
 
 ### 5.3 Buttons and actions
 Three forms, all radius 0:
