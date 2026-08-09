@@ -14,15 +14,29 @@ services:
     # Closest Render region to Abuja — §10.3 treats latency as a design
     # constraint, and Frankfurt is ~2 hops from West African peering.
     region: frankfurt
-    plan: starter
+    # Free spins the service down after 15 minutes without traffic, and the
+    # next visitor waits ~1 minute for it to wake. Change to `starter` ($7/mo)
+    # to keep it warm — the only edit needed, and it takes effect on push.
+    plan: free
     branch: main
     autoDeploy: true
 
-    # `npm ci` installs exactly the lockfile, so a deploy cannot drift from
-    # what was tested locally. --include=dev is explicit because Render sets
-    # NODE_ENV=production, which would otherwise skip the build-time
-    # typescript and @astrojs/check.
-    buildCommand: npm ci --include=dev && npm run build
+    # `npm install`, not `npm ci`.
+    #
+    # `npm ci` refuses to run unless package.json and package-lock.json agree,
+    # and a lockfile generated on Windows cannot satisfy it on Linux. sharp
+    # pulls in optional wasm32 packages whose *peer* dependencies (@emnapi/core,
+    # @emnapi/runtime) npm prunes from the tree on Windows and expects on Linux.
+    # `npm install --package-lock-only` cannot fix this from a Windows machine:
+    # it reproduces the same pruning. See docs/DEPLOY.md.
+    #
+    # `npm install` still honours every version the lockfile pins — it resolves
+    # only what is missing — so the drift is limited to that wasm branch, which
+    # is never loaded on Linux x64 anyway.
+    #
+    # --include=dev is explicit because Render sets NODE_ENV=production, which
+    # would otherwise skip the build-time typescript and @astrojs/check.
+    buildCommand: npm install --include=dev && npm run build
     startCommand: node server.mjs
 
     # `/` is a real page, so a failed build that produced no dist/ fails the

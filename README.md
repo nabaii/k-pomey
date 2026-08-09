@@ -145,7 +145,7 @@ been supplied. The facility build is `neverLink: true` permanently, per §3.3.
 
 **Render Web Service** — see [docs/DEPLOY.md](docs/DEPLOY.md) for the full
 procedure. `render.yaml` is committed, so the service is reproducible from the
-repo: build `npm ci --include=dev && npm run build`, start `node server.mjs`.
+repo: build `npm install --include=dev && npm run build`, start `node server.mjs`.
 
 The output is unchanged by this: `npm run build` is still a pure static export,
 and `server.mjs` is a dependency-free file server for `dist/`. The same `dist/`
