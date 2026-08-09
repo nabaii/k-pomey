@@ -1,0 +1,42 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+#
+# The service is a Web Service, not a Static Site, because that is what was
+# asked for. It still serves the plain static export required by spec §12.2:
+# `npm run build` writes HTML to dist/, and server.mjs serves those files.
+#
+# Committing this file means the service is reproducible: a new Render account
+# can point at this repo and get an identical deployment with no console
+# clicking, and any change to the build or start command is reviewed in git.
+services:
+  - type: web
+    name: kpomey
+    runtime: node
+    # Closest Render region to Abuja — §10.3 treats latency as a design
+    # constraint, and Frankfurt is ~2 hops from West African peering.
+    region: frankfurt
+    plan: starter
+    branch: main
+    autoDeploy: true
+
+    # `npm ci` installs exactly the lockfile, so a deploy cannot drift from
+    # what was tested locally. --include=dev is explicit because Render sets
+    # NODE_ENV=production, which would otherwise skip the build-time
+    # typescript and @astrojs/check.
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: node server.mjs
+
+    # `/` is a real page, so a failed build that produced no dist/ fails the
+    # health check instead of going live empty.
+    healthCheckPath: /
+
+    envVars:
+      # Must match .node-version. Kept here too so the blueprint is
+      # self-describing for anyone reading only this file.
+      - key: NODE_VERSION
+        value: 22.21.0
+      # Absolute URL used for <link rel="canonical"> and og:url at build time.
+      # Set this in the Render dashboard to the live origin — the .onrender.com
+      # URL until the custom domain is attached, then https://kpomey.com.
+      # `sync: false` means Render prompts rather than committing the value.
+      - key: PUBLIC_SITE_URL
+        sync: false

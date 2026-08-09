@@ -9,6 +9,7 @@ npm run dev        # site + admin at /keystatic
 npm run build      # static export to dist/
 npm run preview    # serve dist/
 npm run check      # types
+npm start          # serve dist/ exactly as production does
 ```
 
 ---
@@ -142,8 +143,18 @@ been supplied. The facility build is `neverLink: true` permanently, per §3.3.
 
 ## Deployment
 
-Netlify or Vercel, connected to Git. Build `npm run build`, publish `dist/`. No
-server runtime, no environment variables.
+**Render Web Service** — see [docs/DEPLOY.md](docs/DEPLOY.md) for the full
+procedure. `render.yaml` is committed, so the service is reproducible from the
+repo: build `npm ci --include=dev && npm run build`, start `node server.mjs`.
+
+The output is unchanged by this: `npm run build` is still a pure static export,
+and `server.mjs` is a dependency-free file server for `dist/`. The same `dist/`
+still drops onto Netlify, Vercel, S3 or any other static host with no runtime —
+build `npm run build`, publish `dist/`.
+
+The only environment variable that affects the output is `PUBLIC_SITE_URL`, the
+origin baked into `<link rel="canonical">` and `og:url`. Unset, it falls back to
+Render's `RENDER_EXTERNAL_URL`, then to `https://kpomey.com`.
 
 To let the client edit from a phone, deploy the admin separately with
 `npm run build:admin` and switch `storage` in `keystatic.config.ts` from

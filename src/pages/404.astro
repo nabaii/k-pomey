@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import Forward from '../components/Forward.astro';
+
+/**
+ * §11.3 — an error says what happened and what to do next, and does not
+ * apologise. A mistyped or retired URL is not the visitor's fault and not a
+ * catastrophe; the page keeps the rail, the nav and the WhatsApp route, so the
+ * only thing lost is the address.
+ *
+ * The build writes this to dist/404.html and server.mjs serves it for anything
+ * that does not resolve. Without it a missing page is a bare server string,
+ * which is the one moment on the site where §1.3's "make a contractor look
+ * like a firm" would fail outright.
+ */
+const routes = [
+  { href: '/work', label: 'Work', meta: 'Gardens, paving and structures we have built' },
+  { href: '/care', label: 'Alatu — garden care', meta: 'Monthly and fortnightly visits' },
+  { href: '/flowers', label: 'Flowers', meta: 'Supply and installation' },
+  { href: '/studio', label: 'The studio', meta: 'How we work, and how to reach us' },
+];
+---
+
+<Base
+  title="Page not found — K. Pomey Landscaping and Alatu"
+  description="That address does not exist on this site. The work, the care plans, the flowers and the studio are all one link away."
+  bar={{
+    href: '/studio#contact',
+    label: 'Book a visit',
+    message: 'Hello K. Pomey, I would like to book a site visit.',
+  }}
+>
+  <section class="section-tight">
+    <div class="wrap">
+      <p class="eyebrow">404</p>
+      <h1 class="page-title">That address<br />does not exist.</h1>
+      <p class="lede">
+        It may have been typed slightly differently, or the page may have moved.
+        Everything on the site is here:
+      </p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="wrap">
+      {routes.map((route) => <Forward href={route.href} label={route.label} meta={route.meta} />)}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .lede {
+    max-width: 46ch;
+    margin-top: 22px;
+    font-size: 1.0625rem;
+    font-weight: 300;
+    color: var(--koke-d);
+  }
+</style>

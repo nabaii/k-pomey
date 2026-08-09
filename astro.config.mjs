@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { defineConfig, fontProviders } from 'astro/config';
 import react from '@astrojs/react';
 import markdoc from '@astrojs/markdoc';
@@ -18,8 +19,49 @@ import keystatic from '@keystatic/astro';
 const script = process.env.npm_lifecycle_event || '';
 const withAdmin = script === 'dev' || script === 'build:admin';
 
+/**
+ * The origin baked into <link rel="canonical"> and og:url at build time.
+ *
+ * On Render the site is reachable at kpomey-xxxx.onrender.com before the custom
+ * domain is attached. Hard-coding kpomey.com would make every preview page
+ * declare itself canonical at an address that does not resolve yet, and point
+ * every shared link at a dead host. RENDER_EXTERNAL_URL is set by Render during
+ * both build and run, so the fallback chain is correct with no configuration;
+ * PUBLIC_SITE_URL overrides it once the real domain is live.
+ */
+const siteUrl =
+  process.env.PUBLIC_SITE_URL || process.env.RENDER_EXTERNAL_URL || 'https://kpomey.com';
+
+/**
+ * §10.5 decisions 3 & 4 — the WhatsApp number and email are placeholders until
+ * the client supplies them, and §12.9 calls this "the most likely launch
+ * error". Every page terminates in a WhatsApp route (§6.2), so shipping the
+ * placeholder means shipping a site whose single conversion path is a dead
+ * number — invisible in review, because the button still looks correct.
+ *
+ * This warns rather than fails: deploying the design to a preview URL before
+ * the number arrives is legitimate. Set STRICT_CONTACT=true (in Render, on the
+ * production service) to turn it into a build failure once it should never
+ * happen again.
+ */
+const contact = JSON.parse(
+  readFileSync(new URL('./src/content/settings/site.json', import.meta.url), 'utf8'),
+);
+const placeholders = [
+  contact.whatsapp === '2340000000000' && 'whatsapp',
+  contact.email === 'hello@kpomey.com' && 'email',
+].filter(Boolean);
+
+if (placeholders.length) {
+  const message =
+    `src/content/settings/site.json still holds placeholder ${placeholders.join(' and ')}. ` +
+    'Every call to action on the built site points at it.';
+  if (process.env.STRICT_CONTACT === 'true') throw new Error(message);
+  console.warn(`\n  [contact]  ${message}\n`);
+}
+
 export default defineConfig({
-  site: 'https://kpomey.com',
+  site: siteUrl,
   output: 'static',
   ...(withAdmin ? { adapter: node({ mode: 'standalone' }) } : {}),
   integrations: [markdoc(), ...(withAdmin ? [react(), keystatic()] : [])],
