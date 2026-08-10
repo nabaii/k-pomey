@@ -64,7 +64,11 @@ const businessSchema = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#161A17" />
+    <!-- Mobile browsers tint their chrome with this, directly above the page.
+         Pinned to ink it put a dark band over five paper pages — a visible
+         seam at the top of every phone screen. It follows the surface now.
+         Values are --sumi and --washi; tokens.css cannot be read from here. -->
+    <meta name="theme-color" content={inverted ? '#161A17' : '#EDE9E0'} />
 
     <!-- §4.2 — self-hosted, latin-subset, metric-matched fallbacks. -->
     <Font cssVariable="--font-display" preload={[{ weight: 400 }]} />
@@ -99,12 +103,30 @@ const businessSchema = {
       if (reduced || !('IntersectionObserver' in window)) {
         targets.forEach((el) => el.classList.add('is-in'));
       } else {
+        /**
+         * The stagger counts arrivals, not positions within a callback batch.
+         * Keying it to the entries index meant it only ever fired on desktop:
+         * a multi-column layout delivers four elements in one batch, but the
+         * single column every phone gets delivers them one at a time, so the
+         * index was always 0 and the choreography never happened on the
+         * device that sees the site most.
+         *
+         * A run is a group of elements arriving within 120ms of each other —
+         * which is what "revealed together" actually means, at any width.
+         */
+        let step = 0;
+        let lastEntry = 0;
+
         const io = new IntersectionObserver(
           (entries) => {
-            entries.forEach((entry, i) => {
+            entries.forEach((entry) => {
               if (!entry.isIntersecting) return;
+              const now = performance.now();
+              step = now - lastEntry < 120 ? (step + 1) % 4 : 0;
+              lastEntry = now;
+
               const el = entry.target as HTMLElement;
-              el.style.transitionDelay = `${(i % 4) * 65}ms`;
+              el.style.transitionDelay = `${step * 65}ms`;
               el.classList.add('is-in');
               io.unobserve(el);
             });

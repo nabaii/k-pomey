@@ -143,6 +143,24 @@ const needs = [
   textarea { min-height: 84px; resize: vertical; }
   ::placeholder { color: var(--koke-d); opacity: 1; }
 
+  /* §5.9 fields are underline-only, "no boxes" — which on a desktop reads as
+     restraint and on a phone means asking someone to tap a 38px region with
+     no visible edge. The rule stays; what changes is that the target is now
+     44px and faintly shaded, so you can see where to put your thumb. A wash,
+     not a box: 3% ink resolves on paper, on washi-2 and on ink alike. */
+  @media (max-width: 860px) {
+    input,
+    select,
+    textarea {
+      padding: 13px 12px;
+      background-color: color-mix(in srgb, var(--sumi) 3%, transparent);
+    }
+    /* The arrow is the only sign that this field opens a picker, and 9px of
+       it sitting 4px off the edge was not carrying that. */
+    select { background-position: right 12px center; background-size: 12px 8px; }
+    textarea { min-height: 104px; }
+  }
+
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible { border-bottom-color: var(--niwa); outline-offset: 4px; }

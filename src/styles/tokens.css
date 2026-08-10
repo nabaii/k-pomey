@@ -83,9 +83,35 @@
      UI screens draw round and which §4.3's locked list does not name. */
   --radius: 0;
 
+  /* Sticky header height, so in-page anchors do not land underneath it.
+     Matches .nav-in in Nav.astro at each breakpoint. */
+  --nav-h: 64px;
+
   /* --- motion §4.5 -------------------------------------------------------- */
   --ease-scribe: cubic-bezier(0.25, 0.8, 0.3, 1);
   --ease-rise: cubic-bezier(0.2, 0.7, 0.2, 1);
   --dur-scribe: 2.4s;
   --dur-rise: 0.7s;
+}
+
+/* --- phone legibility floor -------------------------------------------------
+   The drafting language is built on 9–10.5px tracked caps, and at desktop
+   viewing distance that reads as precision. Three of those sizes carry
+   *interactive* content on a phone — the action bar, every button, the hero
+   chips — where the same values read as fine print, outdoors especially.
+
+   The floor is deliberately small (+0.5–1px): enough to lift the tapable
+   labels, not enough to coarsen the annotation system. Desktop is untouched.
+   --------------------------------------------------------------------------- */
+@media (max-width: 560px) {
+  :root {
+    --t-eyebrow: 0.6875rem;   /* 10.5 → 11   buttons, action bar, eyebrows */
+    --t-meta: 0.625rem;       /* 9.5  → 10   chips, sheet labels, captions */
+    --t-ann: 0.59375rem;      /* 9    → 9.5  slot labels, title block      */
+  }
+}
+
+/* The header grows at the same breakpoint its links appear (§8). */
+@media (min-width: 981px) {
+  :root { --nav-h: 72px; }
 }

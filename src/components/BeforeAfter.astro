@@ -51,7 +51,11 @@ const {
   <span class="capsule after-capsule">After</span>
   <span class="handle" aria-hidden="true">&#8596;</span>
 
-  <input class="range" type="range" min="0" max="100" value="50" step="1" aria-label={label} />
+  <!-- Off centre on purpose. At 50 the divider sits dead centre and the frame
+       reads as a static split image; a little off, it reads as something that
+       has been moved and can be moved again. The only cue a touch device gets,
+       since there is no cursor to change shape. -->
+  <input class="range" type="range" min="0" max="100" value="62" step="1" aria-label={label} />
 </div>
 
 <script>
@@ -72,7 +76,7 @@ const {
     background: var(--sumi);
   }
   .layer { position: absolute; inset: 0; }
-  .after { clip-path: inset(0 0 0 var(--x, 50%)); }
+  .after { clip-path: inset(0 0 0 var(--x, 62%)); }
 
   /* The control is the whole frame. Invisible, but present and focusable. */
   .range {
@@ -88,6 +92,11 @@ const {
     opacity: 0;
     cursor: ew-resize;
     appearance: none;
+    /* The control is the whole frame, and on a phone that frame is 4:3 —
+       roughly a third of the viewport. Without this, a thumb starting a
+       vertical flick inside it is arguing with the slider instead of
+       scrolling the page. Horizontal drags still reach the range. */
+    touch-action: pan-y;
   }
   .range::-webkit-slider-thumb { appearance: none; width: 44px; height: 100%; }
   .range::-moz-range-thumb { width: 44px; height: 100%; border: 0; }

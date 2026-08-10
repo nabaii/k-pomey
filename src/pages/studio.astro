@@ -185,6 +185,15 @@ const process = [
   }
   .facts dd { margin: 4px 0 0; }
 
+  /* Wrapping flex put the three facts at the mercy of their own string
+     lengths — one line, or two-and-one, depending on the content. A fixed
+     three-up holds the row whatever the words are, which is what a facts
+     table is for. */
+  @media (max-width: 560px) {
+    .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 14px; }
+    .facts dt { font-size: 1.25rem; }
+  }
+
   .contact {
     padding-block: var(--section);
     background: var(--washi-2);
@@ -210,4 +219,14 @@ const process = [
   .details dd { margin: 0; font-size: 0.9375rem; }
   .details a { text-decoration: none; border-bottom: 1px solid var(--line); }
   .details a:hover { color: var(--niwa); }
+
+  /* The WhatsApp number and the Instagram handle are the two things people
+     reach for on a phone, and both were ~22px of inline text. */
+  @media (max-width: 860px) {
+    .details a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+    }
+  }
 </style>

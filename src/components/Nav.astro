@@ -81,7 +81,7 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
         </a>
       ))
     }
-    <a href="/studio/#contact">Book a site visit</a>
+    <a class="drawer-cta" href="/studio/#contact">Book a site visit</a>
   </nav>
   <p class="drawer-foot">Area 1, Abuja &middot; FCT</p>
 </div>
@@ -97,20 +97,59 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
       ).filter((el) => el.offsetParent !== null);
 
     let lastFocused: HTMLElement | null = null;
+    let scrollY = 0;
+
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /**
+     * body{overflow:hidden} does not hold behind a fixed overlay in iOS
+     * Safari — the page keeps rubber-banding underneath the drawer. Pinning
+     * the body at a negative offset does, and restoring the offset on close
+     * puts the reader back exactly where they were. The restore has to be
+     * instant, or the global scroll-behavior:smooth animates it.
+     */
+    const lockScroll = () => {
+      scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+    };
+
+    const unlockScroll = () => {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      window.scrollTo({ top: scrollY, behavior: 'instant' as ScrollBehavior });
+    };
 
     const open = () => {
       lastFocused = document.activeElement as HTMLElement;
+      lockScroll();
       drawer.hidden = false;
+      // Read a layout value so the browser paints the closed state before the
+      // class lands; without it the transition is skipped and this reverts to
+      // the hard cut it replaced.
+      void drawer.offsetWidth;
+      drawer.classList.add('is-open');
       burger.setAttribute('aria-expanded', 'true');
-      document.body.style.overflow = 'hidden';
       focusables()[0]?.focus();
     };
 
     const close = () => {
-      drawer.hidden = true;
+      drawer.classList.remove('is-open');
       burger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
+      unlockScroll();
       lastFocused?.focus();
+
+      // Keep it in the tree until the fade finishes, then take it out so it
+      // leaves the tab order. Re-opening mid-fade cancels the hide.
+      if (reduced) {
+        drawer.hidden = true;
+      } else {
+        setTimeout(() => {
+          if (!drawer.classList.contains('is-open')) drawer.hidden = true;
+        }, 280);
+      }
     };
 
     burger.addEventListener('click', open);
@@ -142,18 +181,29 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
 </script>
 
 <style>
+  /* Opaque below 981px. A blurred backdrop on a sticky element repaints the
+     region behind it on every frame of a momentum scroll, which is the exact
+     cost §3.1 spends the whole build avoiding on mid-range Android. At this
+     size the header is 64px of a narrow screen and the translucency reads as
+     nothing, so it buys no look to pay for. */
   .nav {
     position: sticky;
     top: 0;
     z-index: 30;
-    background: color-mix(in srgb, var(--washi) 88%, transparent);
-    backdrop-filter: blur(8px);
+    background: var(--washi);
     border-bottom: 1px solid var(--line);
   }
   .nav.inv {
-    background: color-mix(in srgb, var(--sumi) 88%, transparent);
+    background: var(--sumi);
     border-bottom-color: var(--line-inv);
     color: var(--washi);
+  }
+  @media (min-width: 981px) {
+    .nav {
+      background: color-mix(in srgb, var(--washi) 88%, transparent);
+      backdrop-filter: blur(8px);
+    }
+    .nav.inv { background: color-mix(in srgb, var(--sumi) 88%, transparent); }
   }
   .nav-in {
     display: flex;
@@ -235,10 +285,22 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
     z-index: 60;
     display: flex;
     flex-direction: column;
-    padding: var(--gutter);
+    /* The drawer is the one full-bleed surface on the site, so it is the one
+       place the notch and home indicator can actually clip content. */
+    padding:
+      calc(var(--gutter) + env(safe-area-inset-top))
+      calc(var(--gutter) + env(safe-area-inset-right))
+      calc(var(--gutter) + env(safe-area-inset-bottom))
+      calc(var(--gutter) + env(safe-area-inset-left));
     background: var(--sumi);
     color: var(--washi);
+    /* §4.5 — the drawer is where mobile meets the site's motion language, and
+       it used to be the one hard cut in a system that choreographs everything
+       else. Fade the surface, rise the entries behind it. */
+    opacity: 0;
+    transition: opacity 0.26s var(--ease-rise);
   }
+  .drawer.is-open { opacity: 1; }
   .drawer[hidden] { display: none; }
   .drawer-top { display: flex; justify-content: flex-end; }
   .drawer-close {
@@ -258,8 +320,35 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
     font-family: var(--font-display);
     font-size: clamp(1.875rem, 9vw, 2.75rem);
     text-decoration: none;
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 0.4s var(--ease-rise),
+      transform 0.4s var(--ease-rise);
   }
+  .drawer.is-open nav a { opacity: 1; transform: none; }
+  .drawer nav a:nth-child(1) { transition-delay: 0.05s; }
+  .drawer nav a:nth-child(2) { transition-delay: 0.11s; }
+  .drawer nav a:nth-child(3) { transition-delay: 0.17s; }
+  .drawer nav a:nth-child(4) { transition-delay: 0.23s; }
+  .drawer nav a:nth-child(5) { transition-delay: 0.29s; }
   .drawer nav a[aria-current='page'] { color: var(--niwa-2); }
+
+  /* The conversion action was set identically to the four page links, so it
+     read as a fifth page. The gold rule and tracked caps mark it as an act
+     rather than a destination, matching Action's "rule" variant (§5.3). */
+  .drawer-cta {
+    display: flex;
+    align-items: center;
+    min-height: 44px;          /* §9 — the type alone would leave 27px. */
+    margin-top: 10px;
+    border-bottom-color: var(--kanmuri);
+    font-family: var(--font-body);
+    font-size: var(--t-eyebrow);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
   .drawer-foot {
     font-size: var(--t-meta);
     letter-spacing: 0.2em;

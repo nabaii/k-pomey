@@ -112,21 +112,46 @@ const panes = [
   .pane.ink .schedule li { border-bottom-color: var(--line-inv); }
   .pane.ink .schedule li::before { color: var(--kanmuri); }
 
+  /* The hinge, horizontal. Every hinge rule used to live inside the 861px
+     query, so below it the element rendered as an empty zero-height div and
+     the two panes simply butted together on a hard colour change. §3.5 calls
+     the hinge "the one place where boldness is spent" — spending nothing on
+     the phone gave away the idea on the device that sees it most. Rotated, it
+     costs the same eight lines and reads the same way: a gold rule with two
+     drawn pivots, the panes turning about it. */
+  .hinge {
+    position: relative;
+    height: 1px;
+    background: var(--kanmuri);
+  }
+  .hinge::before,
+  .hinge::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 9px;
+    height: 9px;
+    margin-top: -4.5px;
+    border: 1px solid var(--kanmuri);
+    border-radius: 50%;
+    /* Paper-filled, as on desktop: the pivot straddles the seam either way,
+       and a single fill keeps it reading as one drawn part rather than two
+       halves. */
+    background: var(--washi);
+  }
+  .hinge::before { left: 16%; }
+  .hinge::after { right: 16%; }
+
   /* §8 — side by side with the hinge from 861px. */
   @media (min-width: 861px) {
     .diptych { grid-template-columns: 1fr 1px 1fr; }
-    .hinge { position: relative; background: var(--kanmuri); }
+    .hinge { height: auto; }
     .hinge::before,
     .hinge::after {
-      content: '';
-      position: absolute;
+      top: auto;
       left: 50%;
-      width: 9px;
-      height: 9px;
-      margin-left: -4.5px;
-      border: 1px solid var(--kanmuri);
-      border-radius: 50%;
-      background: var(--washi);
+      right: auto;
+      margin: 0 0 0 -4.5px;
     }
     .hinge::before { top: 16%; }
     .hinge::after { bottom: 16%; }
