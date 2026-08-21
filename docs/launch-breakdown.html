@@ -1,0 +1,760 @@
+<title>K. Pomey Launch Register</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --paper:    #EDEEEA;
+    --paper-2:  #E4E6E0;
+    --paper-3:  #DADDD4;
+    --ink:      #171B18;
+    --graphite: #5B635A;
+    --rule:     #C6CABF;
+    --rule-2:   #D5D8CF;
+    --niwa:     #2E5C3E;
+    --clay:     #A0402A;
+    --ochre:    #7E6118;
+
+    --f-display: "Zen Old Mincho", Georgia, "Times New Roman", serif;
+    --f-body: "Zen Kaku Gothic New", "Helvetica Neue", Arial, sans-serif;
+    --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+    --measure: 68ch;
+    --rail: 108px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:    #141715;
+      --paper-2:  #1B1F1C;
+      --paper-3:  #232823;
+      --ink:      #E7E9E3;
+      --graphite: #98A095;
+      --rule:     #2F342F;
+      --rule-2:   #262B26;
+      --niwa:     #83B98F;
+      --clay:     #E08D6E;
+      --ochre:    #CFAC5B;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:    #141715;
+    --paper-2:  #1B1F1C;
+    --paper-3:  #232823;
+    --ink:      #E7E9E3;
+    --graphite: #98A095;
+    --rule:     #2F342F;
+    --rule-2:   #262B26;
+    --niwa:     #83B98F;
+    --clay:     #E08D6E;
+    --ochre:    #CFAC5B;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sheet {
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 0 24px 96px;
+  }
+
+  /* ---------- title block ---------- */
+
+  .titleblock {
+    border-bottom: 2px solid var(--ink);
+    padding: 56px 0 0;
+    margin-bottom: 0;
+  }
+
+  .titleblock .stamp {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--graphite);
+    margin: 0 0 28px;
+  }
+
+  .titleblock h1 {
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: clamp(2.1rem, 6vw, 3.4rem);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    margin: 0 0 10px;
+    text-wrap: balance;
+  }
+
+  .titleblock .sub {
+    font-size: 1.0625rem;
+    color: var(--graphite);
+    max-width: 56ch;
+    margin: 0 0 40px;
+  }
+
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .meta div {
+    padding: 14px 16px 16px 0;
+    border-right: 1px solid var(--rule-2);
+  }
+  .meta div:last-child { border-right: 0; }
+
+  .meta dt, .meta .k {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--graphite);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .meta .v {
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
+  /* ---------- headline figures ---------- */
+
+  .figures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 56px 0 8px;
+  }
+
+  .fig {
+    background: var(--paper);
+    padding: 26px 22px 24px;
+  }
+
+  .fig .n {
+    font-family: var(--f-mono);
+    font-weight: 500;
+    font-size: 2.5rem;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .fig.is-green .n { color: var(--niwa); }
+  .fig.is-ochre .n { color: var(--ochre); }
+  .fig.is-clay  .n { color: var(--clay);  }
+
+  .fig .l {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--graphite);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .fig .d { font-size: 0.875rem; color: var(--graphite); line-height: 1.5; }
+
+  /* ---------- sections ---------- */
+
+  section {
+    display: grid;
+    grid-template-columns: var(--rail) minmax(0, 1fr);
+    gap: 0 32px;
+    padding-top: 64px;
+    border-top: 1px solid var(--rule);
+    margin-top: 56px;
+  }
+
+  .mark {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--graphite);
+    line-height: 1.7;
+    padding-top: 8px;
+  }
+  .mark b { display: block; font-weight: 500; color: var(--ink); }
+
+  .body { max-width: var(--measure); min-width: 0; }
+
+  h2 {
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: clamp(1.5rem, 3.4vw, 2rem);
+    line-height: 1.18;
+    letter-spacing: -0.01em;
+    margin: 0 0 14px;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-family: var(--f-body);
+    font-weight: 500;
+    font-size: 1rem;
+    letter-spacing: 0.005em;
+    margin: 40px 0 10px;
+  }
+
+  p { margin: 0 0 18px; }
+  .lede { font-size: 1.0625rem; color: var(--graphite); margin-bottom: 30px; }
+
+  a { color: inherit; text-decoration-color: var(--rule); text-underline-offset: 3px; }
+  a:hover { text-decoration-color: var(--niwa); }
+  a:focus-visible { outline: 2px solid var(--niwa); outline-offset: 3px; }
+
+  code, .mono {
+    font-family: var(--f-mono);
+    font-size: 0.8125em;
+    background: var(--paper-2);
+    padding: 1px 5px;
+    color: var(--ink);
+  }
+
+  /* ---------- lists ---------- */
+
+  ul.plain { list-style: none; padding: 0; margin: 0 0 18px; }
+  ul.plain li {
+    padding: 12px 0 12px 26px;
+    border-bottom: 1px solid var(--rule-2);
+    position: relative;
+  }
+  ul.plain li:last-child { border-bottom: 0; }
+  ul.plain li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 21px;
+    width: 9px;
+    height: 1px;
+    background: var(--niwa);
+  }
+  ul.plain b { font-weight: 500; }
+  ul.plain .note { color: var(--graphite); font-size: 0.9375rem; display: block; }
+
+  /* ---------- status chips ---------- */
+
+  .chip {
+    display: inline-block;
+    font-family: var(--f-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border: 1px solid currentColor;
+    white-space: nowrap;
+    vertical-align: 1px;
+  }
+  .chip.built  { color: var(--niwa); }
+  .chip.client { color: var(--ochre); }
+  .chip.pay    { color: var(--clay); }
+  .chip.rec    { color: var(--graphite); }
+
+  /* ---------- tables ---------- */
+
+  .scroll { overflow-x: auto; margin: 0 0 22px; border: 1px solid var(--rule); }
+
+  table {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  thead th {
+    font-family: var(--f-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--graphite);
+    font-weight: 500;
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--ink);
+    background: var(--paper-2);
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 13px 14px;
+    border-bottom: 1px solid var(--rule-2);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+
+  td.num, th.num {
+    text-align: right;
+    font-family: var(--f-mono);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  tbody th {
+    text-align: left;
+    font-weight: 500;
+    padding: 13px 14px;
+    border-bottom: 1px solid var(--rule-2);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  tbody tr:last-child th { border-bottom: 0; }
+
+  tr.total th, tr.total td {
+    background: var(--paper-2);
+    border-top: 1px solid var(--ink);
+    border-bottom: 0;
+    font-weight: 500;
+  }
+
+  .sub-note { font-size: 0.8125rem; color: var(--graphite); display: block; margin-top: 3px; }
+
+  /* ---------- callout ---------- */
+
+  .callout {
+    border-left: 2px solid var(--clay);
+    background: var(--paper-2);
+    padding: 20px 22px;
+    margin: 0 0 24px;
+  }
+  .callout .h {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--clay);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .callout.green { border-left-color: var(--niwa); }
+  .callout.green .h { color: var(--niwa); }
+
+  /* ---------- ordered launch sequence ---------- */
+
+  ol.steps { list-style: none; counter-reset: s; padding: 0; margin: 0; }
+  ol.steps li {
+    counter-increment: s;
+    position: relative;
+    padding: 16px 0 16px 46px;
+    border-bottom: 1px solid var(--rule-2);
+  }
+  ol.steps li:last-child { border-bottom: 0; }
+  ol.steps li::before {
+    content: counter(s, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 17px;
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--graphite);
+    font-variant-numeric: tabular-nums;
+  }
+  ol.steps b { font-weight: 500; }
+  ol.steps .note { display: block; color: var(--graphite); font-size: 0.9375rem; }
+
+  /* ---------- footer ---------- */
+
+  footer {
+    margin-top: 72px;
+    padding-top: 22px;
+    border-top: 2px solid var(--ink);
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--graphite);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 760px) {
+    :root { --rail: 0px; }
+    section { grid-template-columns: 1fr; gap: 0; padding-top: 44px; margin-top: 40px; }
+    .mark { padding: 0 0 18px; }
+    .mark b { display: inline; }
+    .meta div { border-right: 0; border-bottom: 1px solid var(--rule-2); }
+    .titleblock { padding-top: 40px; }
+  }
+</style>
+
+<div class="sheet">
+
+  <header class="titleblock">
+    <p class="stamp">K. Pomey Landscaping &amp; Alatu &nbsp;·&nbsp; Website &nbsp;·&nbsp; Handover &amp; launch register</p>
+    <h1>What was built, and what launch still needs</h1>
+    <p class="sub">The site is complete and deployable. What remains is content the business
+      holds, four decisions, and two small accounts.</p>
+
+    <div class="meta">
+      <div>
+        <span class="k">Project</span>
+        <span class="v">K. Pomey website, v2.1</span>
+      </div>
+      <div>
+        <span class="k">Status</span>
+        <span class="v">Built &amp; building clean</span>
+      </div>
+      <div>
+        <span class="k">Blocking launch</span>
+        <span class="v">Contact details, domain</span>
+      </div>
+      <div>
+        <span class="k">Cost to run</span>
+        <span class="v">From ~$12 / year</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="figures">
+    <div class="fig is-green">
+      <span class="l">Delivered</span>
+      <span class="n">7</span>
+      <span class="d">Pages built and generating — five main pages, one project page, a branded 404.</span>
+    </div>
+    <div class="fig is-green">
+      <span class="l">Measured</span>
+      <span class="n">100</span>
+      <span class="d">Lighthouse mobile across performance, accessibility, best practices and SEO, on every page.</span>
+    </div>
+    <div class="fig is-ochre">
+      <span class="l">Waiting on you</span>
+      <span class="n">7</span>
+      <span class="d">Items only the business can supply: photographs, real numbers, prices, the logo.</span>
+    </div>
+    <div class="fig is-clay">
+      <span class="l">Accounts to open</span>
+      <span class="n">2</span>
+      <span class="d">A domain and a mailbox. Everything else on the list has a free tier that fits this site.</span>
+    </div>
+  </div>
+
+  <!-- ============ 01 ============ -->
+  <section>
+    <div class="mark"><b>Sheet 01</b>Built</div>
+    <div class="body">
+      <h2>What has been built</h2>
+      <p class="lede">A complete, self-contained website with an editor attached to it. Nothing
+        below is outstanding work — it is finished and running.</p>
+
+      <h3>The site itself <span class="chip built">Built</span></h3>
+      <ul class="plain">
+        <li><b>Home</b><span class="note">The setting-out drawing, the Landscaping / Alatu diptych, and the five-project index list.</span></li>
+        <li><b>Work</b><span class="note">The portfolio grid, carrying all seven projects with sheet numbering and a title block.</span></li>
+        <li><b>Project page — Poolside garden</b><span class="note">The full case-study template, including the before / after slider. One project is written; six are waiting on content.</span></li>
+        <li><b>Flowers</b><span class="note">Supply-and-install gallery, ten picture slots laid out and captioned.</span></li>
+        <li><b>Care</b><span class="note">The Alatu maintenance offer — three plans, inverted to ink for the whole page.</span></li>
+        <li><b>Studio</b><span class="note">About, process and the contact form.</span></li>
+        <li><b>404</b><span class="note">A branded not-found page, so a mistyped link still looks like the firm.</span></li>
+      </ul>
+
+      <h3>The systems underneath</h3>
+      <ul class="plain">
+        <li><b>A design system, not page-by-page styling</b><span class="note">Every colour, type size and spacing step is defined once. Eighteen reusable components. Changing a colour changes it everywhere, correctly.</span></li>
+        <li><b>An editor for the business</b><span class="note">A visual admin covering projects, flowers, care plans and contact details — no code, no developer. Written up in <code>docs/EDITING.md</code>.</span></li>
+        <li><b>The rules are enforced by the build</b><span class="note">If the home page ever has six projects instead of five, or a photograph is uploaded without a description, the site refuses to publish and says which one. A failed build is cheaper than a broken site.</span></li>
+        <li><b>Speed on a Nigerian mobile connection</b><span class="note">About 12&nbsp;KB over the wire for a first visit. No framework is sent to the browser. Nothing moves on the page as it loads.</span></li>
+        <li><b>Contrast worked to WCAG AA</b><span class="note">Three colours were adjusted to pass, with the arithmetic recorded in <code>docs/CONTRAST.md</code>.</span></li>
+        <li><b>Enquiries route to WhatsApp with no server</b><span class="note">The contact form composes a structured message and opens WhatsApp. Nothing to host, nothing to hack, no spam, and the enquiry arrives readable instead of “hi how much for garden”.</span></li>
+        <li><b>Business details published for machines too</b><span class="note">Name, address, hours and service area are marked up so Google and WhatsApp read them consistently.</span></li>
+        <li><b>Deployment committed to the repository</b><span class="note">The hosting configuration lives in the project, so the live site can be rebuilt from scratch by anyone, with no clicking through a dashboard.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 02 ============ -->
+  <section>
+    <div class="mark"><b>Sheet 02</b>Client</div>
+    <div class="body">
+      <h2>What we need from you</h2>
+      <p class="lede">These are not defects. They are the parts of the site only the business
+        holds — and the top two genuinely block going live.</p>
+
+      <div class="callout">
+        <span class="h">Blocks launch</span>
+        <p><b>The WhatsApp number and email address are still placeholders</b>
+          (<code>2340000000000</code> and <code>hello@kpomey.com</code>). Every button on
+          every page ends at one of them. A site published today would look perfect and
+          convert nobody. The build prints a warning until they are replaced.</p>
+      </div>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>What it blocks</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Live WhatsApp number &amp; email</th>
+              <td>Launch. Every call to action.</td>
+              <td><span class="chip pay">Blocking</span></td>
+            </tr>
+            <tr>
+              <th>Domain name confirmed</th>
+              <td>Launch. Currently assumes <code>kpomey.com</code>.</td>
+              <td><span class="chip pay">Blocking</span></td>
+            </tr>
+            <tr>
+              <th>The logo</th>
+              <td>Every page header, the browser icon, link previews.</td>
+              <td><span class="chip client">Stand-in in place</span></td>
+            </tr>
+            <tr>
+              <th>Photographs</th>
+              <td>Launch quality. Every image is an intentional empty slot until then.</td>
+              <td><span class="chip client">Needs client</span></td>
+            </tr>
+            <tr>
+              <th>Real project names, years and durations</th>
+              <td>Work page and project pages.</td>
+              <td><span class="chip client">Needs client</span></td>
+            </tr>
+            <tr>
+              <th>Which six remaining projects get their own page</th>
+              <td>Depth of the portfolio. Each needs its written scope and facts.</td>
+              <td><span class="chip client">Needs client</span></td>
+            </tr>
+            <tr>
+              <th>Care plan pricing</th>
+              <td>Care page. Currently all three read “on enquiry”.</td>
+              <td><span class="chip client">Decision</span></td>
+            </tr>
+            <tr>
+              <th>Permission to name the shooting-range client</th>
+              <td>The strongest credential on the site is currently anonymous.</td>
+              <td><span class="chip client">Decision</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Our recommendation on pricing: publish “from ₦X per visit” on <b>Monthly</b> and
+        <b>Fortnightly</b>, and keep <b>Grounds</b> on enquiry. A published entry price
+        filters out enquiries that were never going to convert, and reads as a firm with a
+        rate card rather than a contractor who quotes by mood.</p>
+    </div>
+  </section>
+
+  <!-- ============ 03 ============ -->
+  <section>
+    <div class="mark"><b>Sheet 03</b>Accounts</div>
+    <div class="body">
+      <h2>Web services and payments</h2>
+      <p class="lede">Every account the site touches, what it is for, and what it costs. All of
+        these bill in US dollars to a card — a naira card works, charged at your bank's rate.</p>
+
+      <h3>Required to go live</h3>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>What it is for</th>
+              <th class="num">Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Domain name<span class="sub-note">Cloudflare Registrar, Namecheap, or a Nigerian registrar for <code>.com.ng</code></span></th>
+              <td>The address itself — <code>kpomey.com</code>. Renewed yearly. This is the one thing that must be bought.</td>
+              <td class="num">~$11–15<span class="sub-note">per year</span></td>
+            </tr>
+            <tr>
+              <th>Website hosting<span class="sub-note">Cloudflare Pages, Netlify or Render</span></th>
+              <td>Serving the site. The free tier of any of these is genuinely sufficient — the site is plain files, with no database and no server to run.</td>
+              <td class="num">$0<span class="sub-note">free tier</span></td>
+            </tr>
+            <tr>
+              <th>HTTPS certificate</th>
+              <td>The padlock. Issued and renewed automatically by the host.</td>
+              <td class="num">$0<span class="sub-note">included</span></td>
+            </tr>
+            <tr>
+              <th>Business email<span class="sub-note">Zoho Mail free tier, or Google Workspace</span></th>
+              <td>A working <code>hello@kpomey.com</code> inbox. Zoho's free tier covers five people on your own domain; Google Workspace buys you Gmail, Drive and Meet.</td>
+              <td class="num">$0 – $7<span class="sub-note">per person / month</span></td>
+            </tr>
+            <tr>
+              <th>WhatsApp Business</th>
+              <td>Where every enquiry lands. The free app is all the site needs — it opens a normal chat, so no paid API is involved.</td>
+              <td class="num">$0</td>
+            </tr>
+            <tr>
+              <th>Code repository<span class="sub-note">GitHub</span></th>
+              <td>Where the site lives and what the host rebuilds from. Private repositories are free.</td>
+              <td class="num">$0</td>
+            </tr>
+            <tr class="total">
+              <th>Minimum to be live</th>
+              <td>Domain purchased, everything else on a free tier</td>
+              <td class="num">~$12 / year</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Worth paying for</h3>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>What it buys</th>
+              <th class="num">Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Render Starter plan<span class="sub-note">Only if you stay on Render</span></th>
+              <td>Removes the cold start — see sheet 04. Not needed at all if the site moves to Cloudflare Pages or Netlify, which have no cold start on their free tier.</td>
+              <td class="num">$7<span class="sub-note">per month</span></td>
+            </tr>
+            <tr>
+              <th>Google Workspace<span class="sub-note">Business Starter</span></th>
+              <td>Gmail on your own domain, shared Drive, calendar. The professional option if the free mailbox feels thin.</td>
+              <td class="num">~$7<span class="sub-note">per person / month</span></td>
+            </tr>
+            <tr>
+              <th>Website analytics<span class="sub-note">Cloudflare Web Analytics or Plausible</span></th>
+              <td>How many people visit, which pages, and how many tap through to WhatsApp. Cloudflare's is free and private; Plausible is friendlier to read.</td>
+              <td class="num">$0 – $9<span class="sub-note">per month</span></td>
+            </tr>
+            <tr>
+              <th>Photography</th>
+              <td>Not a web service, but the largest real cost of launch quality. Existing job photographs may be enough — the design was built assuming they arrive gradually.</td>
+              <td class="num">By quote</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Free, and worth doing</h3>
+      <ul class="plain">
+        <li><b>Google Business Profile</b><span class="note">Free. Puts the firm on Google Maps for “landscaping Abuja” with your hours, photographs and a call button. For a local trade this typically returns more enquiries than the website does, and the two reinforce each other.</span></li>
+        <li><b>Instagram</b><span class="note">Already yours. The site links to <code>@kpomeylandscapingandalatu</code>; the feed should carry the same logo and colours so the two read as one firm.</span></li>
+        <li><b>Cloudflare DNS</b><span class="note">Free. Faster and easier to manage than most registrars' own DNS panels, and free email forwarding comes with it.</span></li>
+      </ul>
+
+      <div class="callout green">
+        <span class="h">In short</span>
+        <p>The unavoidable spend is <b>the domain, about $12 a year</b>. Everything else can
+          run on a free tier that this site fits inside comfortably. A comfortable setup —
+          paid hosting and Google Workspace — comes to roughly <b>$180 a year</b>.
+          Prices are typical rates; confirm each at signup.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 04 ============ -->
+  <section>
+    <div class="mark"><b>Sheet 04</b>Advise</div>
+    <div class="body">
+      <h2>Four things we recommend before launch</h2>
+      <p class="lede">Found while preparing this handover. Each is small work, and each affects
+        how the site performs in the one situation it was designed for — someone was given
+        the name and sent the link.</p>
+
+      <ul class="plain">
+        <li><b>A link-preview image</b> <span class="chip rec">Recommended</span><span class="note">When the link is shared on WhatsApp today, it arrives as text with no picture. The site is set up to show one; the image itself has never been made. This matters more here than on most sites, because WhatsApp is the main way the link will travel.</span></li>
+        <li><b>Analytics</b> <span class="chip rec">Recommended</span><span class="note">Nothing is currently measuring visits or WhatsApp tap-throughs, so there will be no way to tell whether the site is working. Cloudflare Web Analytics is free and adds a single line to the site.</span></li>
+        <li><b>Move hosting to a static host, or pay the $7</b> <span class="chip rec">Recommended</span><span class="note">On Render's free plan the site goes to sleep after 15 minutes without visitors, and the next person waits about a minute for it to wake. That person is precisely the referred client the site exists to impress. Two ways out: pay $7 a month, or move to Cloudflare Pages / Netlify, where the free tier never sleeps. We suggest the move — it is free and strictly better for this site.</span></li>
+        <li><b>Lock the contact details once they are real</b> <span class="chip rec">Recommended</span><span class="note">Once the live number is in, a single setting on the host makes it impossible to ever publish the placeholder again by accident.</span></li>
+      </ul>
+
+      <h3>One decision left in the design</h3>
+      <p>The specification asks for the Work page in two different forms — a card grid in one
+        section, a text index in another. It is built as the card grid, because that is what
+        the page specification and the drawn screens both show. Worth a look and a decision,
+        but it does not block launch.</p>
+    </div>
+  </section>
+
+  <!-- ============ 05 ============ -->
+  <section>
+    <div class="mark"><b>Sheet 05</b>Sequence</div>
+    <div class="body">
+      <h2>The launch sequence</h2>
+      <p class="lede">In order. Steps 1 to 5 can be done in an afternoon once the details are
+        to hand; the rest is content, and can follow the site being live.</p>
+
+      <ol class="steps">
+        <li><b>Confirm the domain name</b><span class="note">Keep <code>kpomey.com</code> or choose another. Everything downstream assumes it.</span></li>
+        <li><b>Buy the domain</b><span class="note">The only compulsory payment. Renew yearly, ideally with auto-renew on — a lapsed domain takes the site and the email down together.</span></li>
+        <li><b>Open the mailbox and set up <code>hello@</code></b><span class="note">Zoho free tier or Google Workspace. Point it at the new domain.</span></li>
+        <li><b>Give us the live WhatsApp number and email</b><span class="note">They go into one settings screen and update every button on every page at once.</span></li>
+        <li><b>Publish</b><span class="note">Connect the host, attach the domain, and the certificate issues itself. Then open it on a phone and press <em>Send on WhatsApp</em> — that is the one test nothing else covers.</span></li>
+        <li><b>Send the logo</b><span class="note">The header mark, the browser icon and the link preview all come from it.</span></li>
+        <li><b>Send photographs</b><span class="note">Originals, straight from the phone or camera — the site compresses them itself, and better. Priority: the poolside garden before-and-after pair, then one strong shot per project, then flowers.</span></li>
+        <li><b>Decide the care prices</b><span class="note">Then they can be typed straight into the editor.</span></li>
+        <li><b>Write up the remaining projects</b><span class="note">One at a time. Each becomes a page the moment its scope and facts are written; until then it still appears on Work as a picture and a caption.</span></li>
+        <li><b>Claim the Google Business Profile</b><span class="note">Free, and the highest-return thing on this list after the site itself.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ 06 ============ -->
+  <section>
+    <div class="mark"><b>Sheet 06</b>After</div>
+    <div class="body">
+      <h2>Running it afterwards</h2>
+
+      <h3>What you can change yourself</h3>
+      <p>Contact details, projects, flower photographs and care prices — all through the
+        editor, with no developer and no code. The one-page guide is
+        <code>docs/EDITING.md</code>, written for whoever will actually do it.</p>
+
+      <h3>What is deliberately locked</h3>
+      <p>Layout, colours, typefaces, the Landscaping / Alatu spread, the sheet numbers and the
+        order of sections. That is the point: those decisions are what make the site look
+        like it was made by a firm rather than assembled, and an editor that could change
+        them eventually would. Everything that should change month to month is editable.</p>
+
+      <h3>Editing from a phone</h3>
+      <p>The editor currently runs on a computer that has the project on it. To open it from
+        a phone or any browser, it needs to be connected to the code repository and deployed
+        as its own small site — a short piece of work, still free to host. Worth doing if the
+        person updating the site is not at a desk.</p>
+
+      <h3>Ongoing attention</h3>
+      <ul class="plain">
+        <li><b>Yearly</b><span class="note">Domain renewal. Set auto-renew and it is nothing.</span></li>
+        <li><b>Monthly, if you choose it</b><span class="note">Hosting and mailbox, if you take the paid tiers.</span></li>
+        <li><b>Every job</b><span class="note">Three photographs — before, during, after, from the same standing position. That habit is what keeps the portfolio growing without a shoot ever being commissioned.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <span>K. Pomey Landscaping &amp; Alatu</span>
+    <span>Website handover &amp; launch register</span>
+    <span>Sheets 01–06</span>
+  </footer>
+
+</div>
