@@ -1,0 +1,406 @@
+<title>K. Pomey Launch Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500&family=Zen+Kaku+Gothic+New:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --paper:    #EDEEEA;
+    --paper-2:  #E4E6E0;
+    --ink:      #171B18;
+    --graphite: #5B635A;
+    --rule:     #C6CABF;
+    --rule-2:   #D5D8CF;
+    --niwa:     #2E5C3E;
+    --clay:     #A0402A;
+    --ochre:    #7E6118;
+
+    --f-display: "Zen Old Mincho", Georgia, "Times New Roman", serif;
+    --f-body: "Zen Kaku Gothic New", "Helvetica Neue", Arial, sans-serif;
+    --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #141715; --paper-2: #1B1F1C; --ink: #E7E9E3;
+      --graphite: #98A095; --rule: #2F342F; --rule-2: #262B26;
+      --niwa: #83B98F; --clay: #E08D6E; --ochre: #CFAC5B;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #141715; --paper-2: #1B1F1C; --ink: #E7E9E3;
+    --graphite: #98A095; --rule: #2F342F; --rule-2: #262B26;
+    --niwa: #83B98F; --clay: #E08D6E; --ochre: #CFAC5B;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sheet { max-width: 760px; margin: 0 auto; padding: 0 24px 72px; }
+
+  header {
+    padding: 52px 0 20px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .stamp {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--graphite);
+    margin: 0 0 22px;
+  }
+
+  h1 {
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: clamp(1.9rem, 5.5vw, 2.7rem);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    margin: 0 0 12px;
+    text-wrap: balance;
+  }
+
+  .sub { color: var(--graphite); margin: 0; max-width: 54ch; }
+
+  section { padding-top: 38px; margin-top: 34px; border-top: 1px solid var(--rule); }
+  section:first-of-type { border-top: 0; }
+
+  h2 {
+    font-family: var(--f-mono);
+    font-weight: 500;
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--graphite);
+    margin: 0 0 18px;
+  }
+
+  h3 {
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: 1.3rem;
+    line-height: 1.25;
+    margin: 0 0 12px;
+    text-wrap: balance;
+  }
+
+  p { margin: 0 0 16px; max-width: 62ch; }
+  p:last-child { margin-bottom: 0; }
+  .muted { color: var(--graphite); }
+  .small { font-size: 0.875rem; }
+
+  code {
+    font-family: var(--f-mono);
+    font-size: 0.8125em;
+    background: var(--paper-2);
+    padding: 1px 5px;
+  }
+
+  /* tables */
+  .scroll { overflow-x: auto; margin: 0 0 14px; border: 1px solid var(--rule); }
+  table { width: 100%; min-width: 480px; border-collapse: collapse; font-size: 0.9375rem; }
+
+  thead th {
+    font-family: var(--f-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--graphite);
+    font-weight: 500;
+    text-align: left;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--ink);
+    background: var(--paper-2);
+    white-space: nowrap;
+  }
+
+  tbody td, tbody th {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--rule-2);
+    vertical-align: top;
+    line-height: 1.45;
+    text-align: left;
+  }
+  tbody th { font-weight: 500; }
+  tbody tr:last-child td, tbody tr:last-child th { border-bottom: 0; }
+
+  td.num, th.num {
+    text-align: right;
+    font-family: var(--f-mono);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  tr.total th, tr.total td {
+    background: var(--paper-2);
+    border-top: 1px solid var(--ink);
+    border-bottom: 0;
+    font-weight: 500;
+  }
+
+  .sub-note { display: block; font-size: 0.8125rem; color: var(--graphite); margin-top: 2px; }
+
+  /* status */
+  .chip {
+    display: inline-block;
+    font-family: var(--f-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border: 1px solid currentColor;
+    white-space: nowrap;
+  }
+  .chip.due  { color: var(--clay); }
+  .chip.met  { color: var(--niwa); }
+  .chip.next { color: var(--ochre); }
+
+  /* lists */
+  ul.plain { list-style: none; padding: 0; margin: 0; }
+  ul.plain li {
+    padding: 11px 0 11px 24px;
+    border-bottom: 1px solid var(--rule-2);
+    position: relative;
+    max-width: 62ch;
+  }
+  ul.plain li:last-child { border-bottom: 0; }
+  ul.plain li::before {
+    content: "";
+    position: absolute;
+    left: 2px; top: 20px;
+    width: 9px; height: 1px;
+    background: var(--niwa);
+  }
+  ul.plain b { font-weight: 500; }
+  ul.plain .note { display: block; color: var(--graphite); font-size: 0.9375rem; }
+
+  ol.steps { list-style: none; counter-reset: s; padding: 0; margin: 0; }
+  ol.steps li {
+    counter-increment: s;
+    position: relative;
+    padding: 11px 0 11px 40px;
+    border-bottom: 1px solid var(--rule-2);
+    max-width: 62ch;
+  }
+  ol.steps li:last-child { border-bottom: 0; }
+  ol.steps li::before {
+    content: counter(s, decimal-leading-zero);
+    position: absolute; left: 0; top: 12px;
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--graphite);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .callout {
+    border-left: 2px solid var(--clay);
+    background: var(--paper-2);
+    padding: 16px 18px;
+    margin: 0 0 16px;
+    max-width: 62ch;
+  }
+  .callout .h {
+    font-family: var(--f-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--clay);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  footer {
+    margin-top: 46px;
+    padding-top: 18px;
+    border-top: 2px solid var(--ink);
+    font-family: var(--f-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--graphite);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 24px;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 620px) {
+    header { padding-top: 36px; }
+    section { padding-top: 30px; margin-top: 28px; }
+  }
+</style>
+
+<div class="sheet">
+
+  <header>
+    <p class="stamp">K. Pomey Landscaping &amp; Alatu &nbsp;·&nbsp; Website &nbsp;·&nbsp; Summary</p>
+    <h1>Where the website stands</h1>
+    <p class="sub">The site is built and working. Launch is waiting on your contact details,
+      the domain, and the photographs.</p>
+  </header>
+
+  <section>
+    <h2>Built</h2>
+    <h3>A complete six-page website, with an editor you can run yourself.</h3>
+    <p>Home, Work, Flowers, Care, Studio and project pages — plus a visual editor for
+      changing projects, photographs, prices and contact details without a developer.
+      Enquiries route straight to WhatsApp as a structured message, so there is no server to
+      pay for and nothing to break.</p>
+    <p>It scores <b>100 out of 100</b> on Google's mobile checks for speed, accessibility
+      and search readiness, and loads in about 12&nbsp;KB — built for a metered Abuja
+      connection.</p>
+  </section>
+
+  <section>
+    <h2>What we need from you</h2>
+
+    <div class="callout">
+      <span class="h">These two block launch</span>
+      <p class="small" style="margin:0">The <b>live WhatsApp number and email address</b> are
+        still placeholders, and every button on the site points at them. And the
+        <b>domain name</b> needs confirming — we have assumed <code>kpomey.com</code>.</p>
+    </div>
+
+    <ul class="plain">
+      <li><b>Photographs</b><span class="note">Originals from the phone or camera. Every picture on the site is a deliberate empty slot until they arrive.</span></li>
+      <li><b>The logo</b><span class="note">A stand-in is in place. Yours replaces it in the header, the browser icon and link previews.</span></li>
+      <li><b>Care plan prices</b><span class="note">All three currently read “on enquiry”. We suggest publishing a “from” price on Monthly and Fortnightly.</span></li>
+      <li><b>Real project names, years and durations</b><span class="note">And which projects should get their own full page — one is written, six are waiting.</span></li>
+      <li><b>Permission to name the shooting-range client</b><span class="note">The strongest credential on the site is currently anonymous.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Our fee</h2>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Stage</th>
+            <th>Trigger</th>
+            <th class="num">Amount</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>50%</th>
+            <td>On award of the contract</td>
+            <td class="num">₦750,000</td>
+            <td><span class="chip met">Trigger met</span></td>
+          </tr>
+          <tr>
+            <th>35%</th>
+            <td>On completion of development</td>
+            <td class="num">₦525,000</td>
+            <td><span class="chip due">Now due</span></td>
+          </tr>
+          <tr>
+            <th>15%</th>
+            <td>On launch</td>
+            <td class="num">₦225,000</td>
+            <td><span class="chip next">On launch</span></td>
+          </tr>
+          <tr class="total">
+            <th>Total</th>
+            <td>Project fee</td>
+            <td class="num">₦1,500,000</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted small">Development is complete — the site builds clean and every page
+      generates — so the second stage has been reached. The final 15% falls due when the
+      site goes live, which is in your hands via the items above.</p>
+  </section>
+
+  <section>
+    <h2>Running costs</h2>
+    <p>These are yours to hold directly, in your own name, so the accounts stay with the
+      business. Only the first is compulsory.</p>
+
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>What it is for</th>
+            <th class="num">Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Domain name</th>
+            <td>The web address itself, renewed yearly</td>
+            <td class="num">₦20,000<span class="sub-note">per year</span></td>
+          </tr>
+          <tr>
+            <th>Website hosting</th>
+            <td>Serving the site, with the HTTPS padlock included</td>
+            <td class="num">₦0<span class="sub-note">free tier is enough</span></td>
+          </tr>
+          <tr>
+            <th>Business email</th>
+            <td>A working <code>hello@</code> inbox on your own domain</td>
+            <td class="num">₦0<span class="sub-note">or ₦11,000/person/month for Google</span></td>
+          </tr>
+          <tr>
+            <th>WhatsApp Business</th>
+            <td>Where every enquiry lands. The normal free app</td>
+            <td class="num">₦0</td>
+          </tr>
+          <tr>
+            <th>Visitor analytics</th>
+            <td>How many people visit and how many tap through to WhatsApp</td>
+            <td class="num">₦0<span class="sub-note">free option recommended</span></td>
+          </tr>
+          <tr class="total">
+            <th>To run the site</th>
+            <td>Domain only, everything else on a free plan</td>
+            <td class="num">₦20,000 / year</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted small">These services bill in US dollars, converted here at roughly
+      ₦1,550 to the dollar — the naira figure moves with the rate, so confirm at signup. A
+      fully paid setup, with premium hosting and Google Workspace, comes to about
+      ₦280,000 a year. We do not recommend it for a site this size.</p>
+    <p class="muted small" style="margin-top:-6px">One free item worth more than any of the
+      above: a <b>Google Business Profile</b>. It puts the firm on Google Maps for
+      “landscaping Abuja”, and for a local trade it usually returns more enquiries than the
+      website itself.</p>
+  </section>
+
+  <section>
+    <h2>To launch</h2>
+    <ol class="steps">
+      <li><b>Confirm the domain name</b></li>
+      <li><b>Buy the domain</b> <span class="muted">— the one compulsory payment, about ₦20,000</span></li>
+      <li><b>Send us the live WhatsApp number and email</b></li>
+      <li><b>We publish</b> <span class="muted">— the site goes live and the final 15% falls due</span></li>
+      <li><b>Send the logo and photographs</b> <span class="muted">— these can follow, and you can add them yourself</span></li>
+    </ol>
+    <p class="muted small" style="margin-top:18px">Steps 1 to 4 can be done in an afternoon
+      once the details are to hand.</p>
+  </section>
+
+  <footer>
+    <span>K. Pomey Landscaping &amp; Alatu</span>
+    <span>Website summary</span>
+  </footer>
+
+</div>
