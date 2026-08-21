@@ -45,14 +45,14 @@ connection.
 
 ## Our fee
 
-### ₦1,500,000, in three stages.
+### ₦600,000, in three stages.
 
 | Stage | Payable | Amount | Status |
 |---|---|---:|---|
-| 50% | On agreeing to proceed, to begin the engagement | ₦750,000 | **Due now** |
-| 35% | On acceptance of the completed development | ₦525,000 | On acceptance |
-| 15% | On the site going live | ₦225,000 | On launch |
-| **Total** | **Project fee** | **₦1,500,000** | |
+| 50% | On agreeing to proceed, to begin the engagement | ₦300,000 | **Due now** |
+| 35% | On acceptance of the completed development | ₦210,000 | On acceptance |
+| 15% | On the site going live | ₦90,000 | On launch |
+| **Total** | **Project fee** | **₦600,000** | |
 
 The site was built ahead of this agreement so that the proposal could be shown
 rather than described. Development is therefore already complete, and the
