@@ -240,6 +240,42 @@
     header { padding-top: 36px; }
     section { padding-top: 30px; margin-top: 28px; }
   }
+
+  /* ---------- print / PDF ---------- */
+  @page { size: A4; margin: 16mm 14mm 15mm; }
+
+  @media print {
+    /* Force the light palette: a PDF has one appearance, and it is paper. */
+    :root, :root[data-theme="dark"] {
+      --paper: #FFFFFF; --paper-2: #F2F3EF; --ink: #141815;
+      --graphite: #4E564D; --rule: #B9BEB3; --rule-2: #D8DBD2;
+      --niwa: #275234; --clay: #8E3722; --ochre: #6B5214;
+    }
+    body {
+      background: #FFFFFF;
+      font-size: 10.2pt;
+      line-height: 1.5;
+    }
+    .sheet { max-width: none; padding: 0; }
+    header { padding-top: 0; }
+    h1 { font-size: 24pt; }
+    h3 { font-size: 13pt; }
+    h2 { font-size: 8pt; }
+    p, ul.plain li, ol.steps li { max-width: none; }
+    table { min-width: 0; font-size: 9.4pt; }
+    .scroll { overflow: visible; }
+    thead th { font-size: 7pt; padding: 7px 9px; }
+    tbody td, tbody th { padding: 7px 9px; }
+    .sub-note, .small, ul.plain .note { font-size: 8.4pt; }
+    .chip { font-size: 7pt; padding: 2px 5px; }
+
+    /* Keep a section and its table on one page wherever it fits. */
+    section { break-inside: avoid; page-break-inside: avoid; padding-top: 22px; margin-top: 20px; }
+    table, tr, .callout, ol.steps li, ul.plain li { break-inside: avoid; page-break-inside: avoid; }
+    thead { display: table-header-group; }
+    h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+    footer { margin-top: 26px; }
+  }
 </style>
 
 <div class="sheet">
@@ -247,8 +283,8 @@
   <header>
     <p class="stamp">K. Pomey Landscaping &amp; Alatu &nbsp;·&nbsp; Website &nbsp;·&nbsp; Summary</p>
     <h1>Where the website stands</h1>
-    <p class="sub">The site is built and working. Launch is waiting on your contact details,
-      the domain, and the photographs.</p>
+    <p class="sub">The site is built and working. What follows is what it cost, what it
+      costs to run, and the few things still needed to put it live.</p>
   </header>
 
   <section>
@@ -284,12 +320,13 @@
 
   <section>
     <h2>Our fee</h2>
+    <h3>₦1,500,000, in three stages.</h3>
     <div class="scroll">
       <table>
         <thead>
           <tr>
             <th>Stage</th>
-            <th>Trigger</th>
+            <th>Payable</th>
             <th class="num">Amount</th>
             <th>Status</th>
           </tr>
@@ -297,19 +334,19 @@
         <tbody>
           <tr>
             <th>50%</th>
-            <td>On award of the contract</td>
+            <td>On agreeing to proceed, to begin the engagement</td>
             <td class="num">₦750,000</td>
-            <td><span class="chip met">Trigger met</span></td>
+            <td><span class="chip due">Due now</span></td>
           </tr>
           <tr>
             <th>35%</th>
-            <td>On completion of development</td>
+            <td>On acceptance of the completed development</td>
             <td class="num">₦525,000</td>
-            <td><span class="chip due">Now due</span></td>
+            <td><span class="chip next">On acceptance</span></td>
           </tr>
           <tr>
             <th>15%</th>
-            <td>On launch</td>
+            <td>On the site going live</td>
             <td class="num">₦225,000</td>
             <td><span class="chip next">On launch</span></td>
           </tr>
@@ -322,15 +359,17 @@
         </tbody>
       </table>
     </div>
-    <p class="muted small">Development is complete — the site builds clean and every page
-      generates — so the second stage has been reached. The final 15% falls due when the
-      site goes live, which is in your hands via the items above.</p>
+    <p class="muted small">The site was built ahead of this agreement so that the proposal
+      could be shown rather than described. Development is therefore already complete, and
+      the second stage follows the first as soon as you have reviewed and accepted the
+      build. The final stage falls due at launch.</p>
   </section>
 
   <section>
     <h2>Running costs</h2>
-    <p>These are yours to hold directly, in your own name, so the accounts stay with the
-      business. Only the first is compulsory.</p>
+    <h3>₦152,000 a year to keep the site online.</h3>
+    <p>Two recurring payments — the hosting each month and the domain each year. Both
+      should be held in the business's own name, so the accounts stay with you.</p>
 
     <div class="scroll">
       <table>
@@ -339,46 +378,54 @@
             <th>Service</th>
             <th>What it is for</th>
             <th class="num">Cost</th>
+            <th class="num">Per year</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <th>Domain name</th>
-            <td>The web address itself, renewed yearly</td>
-            <td class="num">₦20,000<span class="sub-note">per year</span></td>
+            <th>Hosting<span class="sub-note">Render</span></th>
+            <td>Serving the site, HTTPS padlock included. The paid plan keeps the site awake so it opens instantly for every visitor.</td>
+            <td class="num">₦11,000<span class="sub-note">per month</span></td>
+            <td class="num">₦132,000</td>
           </tr>
           <tr>
-            <th>Website hosting</th>
-            <td>Serving the site, with the HTTPS padlock included</td>
-            <td class="num">₦0<span class="sub-note">free tier is enough</span></td>
+            <th>Domain name</th>
+            <td>The web address itself, renewed yearly.</td>
+            <td class="num">₦20,000<span class="sub-note">per year</span></td>
+            <td class="num">₦20,000</td>
           </tr>
           <tr>
             <th>Business email</th>
-            <td>A working <code>hello@</code> inbox on your own domain</td>
-            <td class="num">₦0<span class="sub-note">or ₦11,000/person/month for Google</span></td>
+            <td>A working <code>hello@</code> inbox on your own domain.</td>
+            <td class="num">₦0<span class="sub-note">free plan</span></td>
+            <td class="num">₦0</td>
           </tr>
           <tr>
             <th>WhatsApp Business</th>
-            <td>Where every enquiry lands. The normal free app</td>
+            <td>Where every enquiry lands. The normal free app.</td>
+            <td class="num">₦0</td>
             <td class="num">₦0</td>
           </tr>
           <tr>
             <th>Visitor analytics</th>
-            <td>How many people visit and how many tap through to WhatsApp</td>
-            <td class="num">₦0<span class="sub-note">free option recommended</span></td>
+            <td>How many people visit, and how many tap through to WhatsApp.</td>
+            <td class="num">₦0<span class="sub-note">free plan</span></td>
+            <td class="num">₦0</td>
           </tr>
           <tr class="total">
-            <th>To run the site</th>
-            <td>Domain only, everything else on a free plan</td>
-            <td class="num">₦20,000 / year</td>
+            <th>Total</th>
+            <td>To keep the site online</td>
+            <td class="num">₦11,000 / month</td>
+            <td class="num">₦152,000 / year</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <p class="muted small">These services bill in US dollars, converted here at roughly
-      ₦1,550 to the dollar — the naira figure moves with the rate, so confirm at signup. A
-      fully paid setup, with premium hosting and Google Workspace, comes to about
-      ₦280,000 a year. We do not recommend it for a site this size.</p>
+    <p class="muted small">Hosting and the domain bill in US dollars, converted here at
+      roughly ₦1,550 to the dollar — the naira figure moves with the rate, so confirm at
+      signup. Email and analytics have free plans this site fits inside comfortably; a
+      Google Workspace mailbox, if you want one, is about ₦11,000 per person per month on
+      top.</p>
     <p class="muted small" style="margin-top:-6px">One free item worth more than any of the
       above: a <b>Google Business Profile</b>. It puts the firm on Google Maps for
       “landscaping Abuja”, and for a local trade it usually returns more enquiries than the
@@ -388,13 +435,14 @@
   <section>
     <h2>To launch</h2>
     <ol class="steps">
-      <li><b>Confirm the domain name</b></li>
-      <li><b>Buy the domain</b> <span class="muted">— the one compulsory payment, about ₦20,000</span></li>
+      <li><b>Agree to proceed</b> <span class="muted">— the first 50% falls due</span></li>
+      <li><b>Confirm the domain name, and buy it</b> <span class="muted">— about ₦20,000</span></li>
+      <li><b>Open the hosting account</b> <span class="muted">— ₦11,000 a month, in the business's name</span></li>
       <li><b>Send us the live WhatsApp number and email</b></li>
       <li><b>We publish</b> <span class="muted">— the site goes live and the final 15% falls due</span></li>
       <li><b>Send the logo and photographs</b> <span class="muted">— these can follow, and you can add them yourself</span></li>
     </ol>
-    <p class="muted small" style="margin-top:18px">Steps 1 to 4 can be done in an afternoon
+    <p class="muted small" style="margin-top:18px">Steps 2 to 5 can be done in an afternoon
       once the details are to hand.</p>
   </section>
 
