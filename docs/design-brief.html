@@ -1,0 +1,316 @@
+<title>K. Pomey Design Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500&family=Zen+Kaku+Gothic+New:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --paper: #EDEEEA; --paper-2: #E4E6E0; --ink: #171B18; --graphite: #5B635A;
+    --rule: #C6CABF; --rule-2: #D5D8CF; --niwa: #2E5C3E; --clay: #A0402A; --ochre: #7E6118;
+    --f-display: "Zen Old Mincho", Georgia, "Times New Roman", serif;
+    --f-body: "Zen Kaku Gothic New", "Helvetica Neue", Arial, sans-serif;
+    --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #141715; --paper-2: #1B1F1C; --ink: #E7E9E3; --graphite: #98A095;
+      --rule: #2F342F; --rule-2: #262B26; --niwa: #83B98F; --clay: #E08D6E; --ochre: #CFAC5B;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #141715; --paper-2: #1B1F1C; --ink: #E7E9E3; --graphite: #98A095;
+    --rule: #2F342F; --rule-2: #262B26; --niwa: #83B98F; --clay: #E08D6E; --ochre: #CFAC5B;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--f-body); font-weight: 300;
+    font-size: 16px; line-height: 1.62; -webkit-font-smoothing: antialiased;
+  }
+
+  .sheet { max-width: 760px; margin: 0 auto; padding: 0 24px 72px; }
+
+  header { padding: 52px 0 20px; border-bottom: 2px solid var(--ink); }
+  .stamp {
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--graphite); margin: 0 0 22px;
+  }
+  h1 {
+    font-family: var(--f-display); font-weight: 500;
+    font-size: clamp(1.9rem, 5.5vw, 2.7rem); line-height: 1.1;
+    letter-spacing: -0.015em; margin: 0 0 12px; text-wrap: balance;
+  }
+  .sub { color: var(--graphite); margin: 0; max-width: 54ch; }
+
+  section { padding-top: 38px; margin-top: 34px; border-top: 1px solid var(--rule); }
+  section:first-of-type { border-top: 0; }
+
+  h2 {
+    font-family: var(--f-mono); font-weight: 500; font-size: 10.5px;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--graphite); margin: 0 0 18px;
+  }
+  h3 {
+    font-family: var(--f-display); font-weight: 500; font-size: 1.32rem;
+    line-height: 1.25; margin: 0 0 12px; text-wrap: balance;
+  }
+  h4 {
+    font-family: var(--f-body); font-weight: 500; font-size: 1rem;
+    margin: 26px 0 8px;
+  }
+
+  p { margin: 0 0 16px; max-width: 62ch; }
+  p:last-child { margin-bottom: 0; }
+  .muted { color: var(--graphite); }
+  .small { font-size: 0.9rem; }
+
+  .pull {
+    font-family: var(--f-display); font-size: 1.25rem; line-height: 1.4;
+    margin: 0 0 18px; padding-left: 18px; border-left: 2px solid var(--niwa);
+    max-width: 54ch; text-wrap: balance;
+  }
+
+  ul.plain { list-style: none; padding: 0; margin: 0; }
+  ul.plain li {
+    padding: 12px 0 12px 24px; border-bottom: 1px solid var(--rule-2);
+    position: relative; max-width: 62ch;
+  }
+  ul.plain li:last-child { border-bottom: 0; }
+  ul.plain li::before {
+    content: ""; position: absolute; left: 2px; top: 21px;
+    width: 9px; height: 1px; background: var(--niwa);
+  }
+  ul.plain b { font-weight: 500; }
+  ul.plain .note { display: block; color: var(--graphite); font-size: 0.9375rem; }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin: 0 0 18px; }
+  .half { background: var(--paper); padding: 20px 20px 22px; }
+  .half.ink { background: var(--ink); color: var(--paper); }
+  .half .w {
+    font-family: var(--f-display); font-size: 1.5rem; line-height: 1.1;
+    display: block; margin-bottom: 6px;
+  }
+  .half .g {
+    font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.16em;
+    text-transform: uppercase; display: block; margin-bottom: 12px;
+    color: var(--graphite);
+  }
+  .half.ink .g { color: #9AA396; }
+  .half p { font-size: 0.9375rem; margin: 0; max-width: none; }
+
+  .callout {
+    border-left: 2px solid var(--ochre); background: var(--paper-2);
+    padding: 16px 18px; margin: 0 0 16px; max-width: 62ch;
+  }
+  .callout .h {
+    font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--ochre); display: block; margin-bottom: 6px;
+  }
+  .callout p { margin: 0; font-size: 0.9375rem; }
+
+  ol.steps { list-style: none; counter-reset: s; padding: 0; margin: 0; }
+  ol.steps li {
+    counter-increment: s; position: relative; padding: 12px 0 12px 40px;
+    border-bottom: 1px solid var(--rule-2); max-width: 62ch;
+  }
+  ol.steps li:last-child { border-bottom: 0; }
+  ol.steps li::before {
+    content: counter(s, decimal-leading-zero); position: absolute; left: 0; top: 13px;
+    font-family: var(--f-mono); font-size: 11px; color: var(--graphite);
+    font-variant-numeric: tabular-nums;
+  }
+  ol.steps b { font-weight: 500; }
+  ol.steps .note { display: block; color: var(--graphite); font-size: 0.9375rem; }
+
+  footer {
+    margin-top: 46px; padding-top: 18px; border-top: 2px solid var(--ink);
+    font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--graphite);
+    display: flex; flex-wrap: wrap; gap: 6px 24px; justify-content: space-between;
+  }
+
+  @media (max-width: 620px) {
+    header { padding-top: 36px; }
+    section { padding-top: 30px; margin-top: 28px; }
+    .split { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- print / PDF ---------- */
+  @page { size: A4; margin: 16mm 14mm 15mm; }
+
+  @media print {
+    :root, :root[data-theme="dark"] {
+      --paper: #FFFFFF; --paper-2: #F2F3EF; --ink: #141815; --graphite: #4E564D;
+      --rule: #B9BEB3; --rule-2: #D8DBD2; --niwa: #275234; --clay: #8E3722; --ochre: #6B5214;
+    }
+    body { background: #fff; font-size: 10.2pt; line-height: 1.5; }
+    .sheet { max-width: none; padding: 0; }
+    header { padding-top: 0; }
+    h1 { font-size: 23pt; }
+    h3 { font-size: 13pt; }
+    h2 { font-size: 8pt; }
+    .pull { font-size: 12.5pt; }
+    p, ul.plain li, ol.steps li { max-width: none; }
+    .small, ul.plain .note, ol.steps .note { font-size: 8.6pt; }
+    section { break-inside: avoid; page-break-inside: avoid; padding-top: 20px; margin-top: 18px; }
+    .split, .callout, ol.steps li, ul.plain li, .pull { break-inside: avoid; page-break-inside: avoid; }
+    h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
+    footer { margin-top: 24px; }
+  }
+</style>
+
+<div class="sheet">
+
+  <header>
+    <p class="stamp">K. Pomey Landscaping &amp; Alatu &nbsp;·&nbsp; Website &nbsp;·&nbsp; Design brief</p>
+    <h1>How the website was designed, and why</h1>
+    <p class="sub">The thinking behind the site in a few minutes, rather than the
+      twenty-five page build specification it came from.</p>
+  </header>
+
+  <section>
+    <h2>The job</h2>
+    <p class="pull">To make a contractor look like a firm, to someone who has already
+      heard the name.</p>
+    <p>Almost nobody will find this site by searching. They will get your name from a
+      referral, an architect, or a WhatsApp thread — and then check whether you are real
+      and serious before they call. That check is the whole job of the site.</p>
+    <p>So it is built as a <b>credential</b>, not a shop window. Success is not visitor
+      numbers. It is that the enquiries get better, and that you are invited to quote for
+      larger work.</p>
+  </section>
+
+  <section>
+    <h2>The idea</h2>
+    <h3>The site is a setting-out drawing.</h3>
+    <p>Landscape practices work in plan before they work in ground. Your own positioning
+      is <em>design first</em>; your Instagram highlight is <em>Render / Reality</em>. So
+      the site does not present itself as a photo gallery with words around it. It
+      presents itself as the thing you actually produce first — a drawing.</p>
+    <p>That means fine ruled lines, a drawn garden plan, sheet numbers and a title block
+      running through every page, the way they would on a real drawing set.</p>
+    <p>Three reasons this was chosen over a conventional photo-led site:</p>
+    <ul class="plain">
+      <li><b>It is specific to your trade</b><span class="note">A restaurant could not use it. A competing landscaper could only use it by becoming a firm that draws — which is exactly the claim you are making.</span></li>
+      <li><b>It answers the real worry</b><span class="note">A prospect's anxiety is competence, not taste. A page that looks like a set of construction drawings answers that before a word is read.</span></li>
+      <li><b>It is light</b><span class="note">The whole opening screen is drawn in code rather than photographed, so it costs almost nothing to load on Nigerian mobile data.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>The signature</h2>
+    <h3>The home page splits in two, on a gold hinge.</h3>
+    <div class="split">
+      <div class="half ink">
+        <span class="g">English</span>
+        <span class="w">Landscaping</span>
+        <p>The building of it.</p>
+      </div>
+      <div class="half">
+        <span class="g">Hausa</span>
+        <span class="w">Alatu</span>
+        <p>The keeping of it.</p>
+      </div>
+    </div>
+    <p>Your business model drawn as a layout. It needs no photography, it says something
+      true rather than decorative, and no competitor can copy it, because no competitor
+      has that name.</p>
+    <p>It is the one bold moment in the site. Everything else stays quiet on purpose —
+      boldness spent everywhere is noise.</p>
+  </section>
+
+  <section>
+    <h2>A deliberate decision</h2>
+    <h3>The shooting range is shown as proof, not as a service.</h3>
+    <p>It is your largest and most impressive engagement, so the instinct is to lead with
+      it. The site deliberately does not.</p>
+    <p>If specialist construction leads, the site starts attracting construction
+      enquiries — work you do not want to be defined by. So the range is given weight
+      without being given the front door: a prominent position, a status flag, the
+      longest caption on the Work page, and the single strongest colour accent on the
+      site. It reads as evidence that you can be trusted with the hard parts of a garden,
+      which is precisely its value.</p>
+  </section>
+
+  <section>
+    <h2>Photography</h2>
+    <h3>The site works before the photographs arrive, and improves after.</h3>
+    <p>Every picture on the site sits in a prepared slot. Empty, the slot is captioned and
+      looks intentional. Filled, the page gets better. Nothing about the layout changes.</p>
+    <p>This is why the site could be finished and shown to you before a single photograph
+      was supplied — and why photographs can be added one at a time, whenever you have
+      them, without any further design work.</p>
+    <div class="callout">
+      <span class="h">One habit worth starting</span>
+      <p>On every new project, take three shots <b>from the same standing position</b> —
+        before mobilisation, at structural stage, and at handover. Mark the spot so the
+        frames line up. From three different angles you get three unrelated pictures; from
+        one angle you get a story, and the before/after slider on the site has something
+        real to show.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>The pages</h2>
+    <p>Five pages, plus a page for each project you choose to write up. Separate pages
+      rather than one long scroll, so each one is a <b>link you can send</b> — the care
+      plans to an estate manager, a project page to a homeowner who needs convincing.</p>
+    <ul class="plain">
+      <li><b>Home</b><span class="note">The drawing, the two halves of the business, and a short index of five projects.</span></li>
+      <li><b>Work</b><span class="note">The proof. Every project, with the range weighted as described above.</span></li>
+      <li><b>Flowers</b><span class="note">Supply and install — the colour business, and the one page built to be photograph-led.</span></li>
+      <li><b>Care</b><span class="note">Alatu, as a product with plans rather than a favour done between jobs.</span></li>
+      <li><b>Studio</b><span class="note">Who you are, how you work, and how to reach you.</span></li>
+    </ul>
+    <p class="small muted">Every page ends in a WhatsApp route. There is no form-and-wait
+      path anywhere on the site, because that is not how enquiries actually happen here.</p>
+  </section>
+
+  <section>
+    <h2>On a phone</h2>
+    <p>Traffic will be almost entirely mobile, arriving from WhatsApp and Instagram, on
+      metered data. Desktop is where the craft shows, but the phone is where the business
+      happens — and nearly every constraint in the design comes from that.</p>
+    <p>The result: the site opens in about 12 KB, scores full marks on Google's mobile
+      checks, and is readable by someone using a screen reader. A WhatsApp button sits
+      permanently at the bottom of the screen on every page.</p>
+  </section>
+
+  <section>
+    <h2>What you can change</h2>
+    <p>Through the editor, with no developer: projects and their write-ups, the flower
+      gallery, care plans and prices, and your contact details.</p>
+    <p>Locked, on purpose: layout, colours, typefaces, the two-panel spread, the sheet
+      numbering and the order of sections. Those decisions are what make the site look
+      like it was made by a firm rather than assembled — and an editor that could change
+      them eventually would, on a Friday afternoon, with no way back.</p>
+  </section>
+
+  <section>
+    <h2>Not included</h2>
+    <p>Deliberately out of scope, so there is no confusion later: a blog, client logins,
+      online payments, a booking calendar, language switching, testimonials, staff
+      profiles, a downloadable brochure, live chat and newsletter sign-up.</p>
+    <p>None of these serve the job on page one. Each is available later if it earns its
+      place.</p>
+  </section>
+
+  <section>
+    <h2>Worth more than the website</h2>
+    <p>Four things that would return more than anything left on the site itself. Raised
+      because they came out of the same research, not to sell further work.</p>
+    <ol class="steps">
+      <li><b>A company profile document</b><span class="note">Ten to twelve pages, procurement-ready. This is the instrument that opens institutional doors — estates, schools, hotels. A website does not do that job.</span></li>
+      <li><b>Care pricing and a contract template</b><span class="note">Turns maintenance from an ad-hoc favour into a sold product with a renewal date. The single biggest change available to the business.</span></li>
+      <li><b>The range documented properly on completion</b><span class="note">Photographed and written up with permission, it becomes the strongest credential you own.</span></li>
+      <li><b>Instagram aligned to the site</b><span class="note">Same mark, same colours, same restraint, so the two reinforce one identity instead of competing.</span></li>
+    </ol>
+  </section>
+
+  <footer>
+    <span>K. Pomey Landscaping &amp; Alatu</span>
+    <span>Design brief</span>
+  </footer>
+
+</div>
